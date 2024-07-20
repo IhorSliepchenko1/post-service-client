@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { login } from "../../features/auth/authSlice";
+import { login, current } from "../../features/auth/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useLogin } from "../../hooks/useLogin";
@@ -21,7 +21,6 @@ const Login = ({ setSelected }) => {
   const navigate = useNavigate();
 
   const error = useSelector((state) => state.error.value);
-
   const loginState = useSelector((state) => state.validation.email);
   const passwordState = useSelector((state) => state.validation.password);
 
@@ -30,13 +29,18 @@ const Login = ({ setSelected }) => {
   }, [loginState, passwordState]);
 
   useSelector((state) => state.error.value);
+
   const onSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const loginApi = await apiHandler();
+
       dispatch(login(loginApi.data.token));
+      dispatch(current(loginApi.data.userId));
       dispatch(emailStatus(false));
       dispatch(passwordStatus(false));
+
       navigate("/");
     } catch (err) {
       console.error(err);

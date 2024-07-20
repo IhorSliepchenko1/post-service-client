@@ -18,7 +18,7 @@ const InputMail = ({ changeHandler }) => {
 
   useEffect(() => {
     dispatch(emailStatus(value.length === 0 ? false : !isInvalid));
-  }, [isInvalid]);
+  }, [isInvalid, value]);
 
   return (
     <Input

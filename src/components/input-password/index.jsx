@@ -20,7 +20,7 @@ const InputPassword = ({ changeHandler, passMessage }) => {
 
   useEffect(() => {
     dispatch(passwordStatus(value.length >= 6 ? true : false));
-  }, [isInvalid]);
+  }, [isInvalid, value]);
 
   return (
     <Input
