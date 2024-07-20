@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  min-height: 100vh;
+  background: rgb(160, 160, 160);
+}
+
+.input-width {
+  min-width: 400px;
+}
+
+.danger-error {
+  color: red;
+  font-weight: 600;
+}
