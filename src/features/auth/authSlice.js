@@ -13,7 +13,7 @@ export const authSlice = createSlice({
       localStorage.setItem("jwt", JSON.stringify(action.payload));
       state.jwt = action.payload;
     },
-    current: (state, action) => {
+    idCurrent: (state, action) => {
       localStorage.setItem("id", JSON.stringify(action.payload));
       state.id = action.payload;
     },
@@ -26,6 +26,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { login, logout, current } = authSlice.actions;
+export const { login, logout, idCurrent } = authSlice.actions;
 
 export default authSlice.reducer;

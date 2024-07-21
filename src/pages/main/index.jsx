@@ -1,13 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMethod } from "../../hooks/useMethod";
 import { useEffect, useState } from "react";
+import { currentUserData } from "../../features/current/currentSlice";
+
 const Main = () => {
   const userInfo = useSelector((state) => state.auth);
   const { currentUser } = useMethod();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
   const current = async () => {
     const response = await currentUser(userInfo.jwt, userInfo.id);
+    dispatch(currentUserData(response.data));
     return response;
   };
 
@@ -16,8 +21,6 @@ const Main = () => {
       setData([res.data]);
     });
   }, []);
-
-  console.log(data);
 
   return (
     <div>

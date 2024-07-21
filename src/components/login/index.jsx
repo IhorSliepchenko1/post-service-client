@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { login, current } from "../../features/auth/authSlice";
+import { login, idCurrent } from "../../features/auth/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useLogin } from "../../hooks/useLogin";
@@ -37,7 +37,7 @@ const Login = ({ setSelected }) => {
       const loginApi = await apiHandler();
 
       dispatch(login(loginApi.data.token));
-      dispatch(current(loginApi.data.userId));
+      dispatch(idCurrent(loginApi.data.userId));
       dispatch(emailStatus(false));
       dispatch(passwordStatus(false));
 

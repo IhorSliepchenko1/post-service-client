@@ -1,11 +1,12 @@
 import ProtectedRoute from "../../utils/protected";
 import { Outlet } from "react-router-dom";
+import NavBar from "../nav-bar";
 
 const Layout = () => {
   return (
     <ProtectedRoute>
-      <div className="flex max-w-screen-xl mx-auto mt-10">
-        <div className="flex-2 p-4">{/* <NavBar /> */}</div>
+      <NavBar />
+      <div className="flex flex-col max-w-screen-xl mt-10 container">
         <div className="flex-1 p-4">
           <Outlet />
         </div>
