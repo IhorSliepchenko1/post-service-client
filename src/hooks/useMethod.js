@@ -1,11 +1,11 @@
 import axios from "axios";
-import { BASE_URL, headers } from "../config";
+import { BASE_URL } from "../config";
 
 export const useMethod = () => {
-  const currentUser = async (token, userId) => {
+  const universalGet = async (token, userId, api) => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/current`,
+        `${BASE_URL}/api/${api}`,
 
         {
           headers: {
@@ -21,22 +21,21 @@ export const useMethod = () => {
       console.error(error);
     }
   };
+  // const mailsGet = async (token, userId, api) => {
+  //   try {
+  //     const response = await axios.get(`${BASE_URL}/api/${api}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         authorization: token,
+  //         userId: userId,
+  //       },
+  //     });
 
-  const getAllMails = async (token, userId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/mails`, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: token,
-          userId: userId,
-        },
-      });
+  //     return response;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-      return response;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  return { currentUser, getAllMails };
+  return { universalGet };
 };

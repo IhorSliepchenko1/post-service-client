@@ -1,8 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/layout";
 import Auth from "./../pages/auth/index";
-import Registration from "./../components/register/index";
-import Main from "./../pages/main/index";
+import MyMails from "../components/my-mails";
 
 // PAGES
 
@@ -18,7 +17,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Main />,
+        element: <MyMails />,
       },
       {
         path: "/mails",

@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+main {
   min-height: 100vh;
-  background: rgb(160, 160, 160);
+}
+* {
+  font-family: "Oswald", sans-serif;
 }
 
 .input-width {
@@ -18,4 +20,27 @@ body {
 
 header {
   min-width: 100%;
+}
+
+.theme-icon {
+  cursor: pointer;
+}
+
+.user-card {
+  min-width: 385px;
+  line-height: 2;
+  margin-right: 15px;
+  background-color: grey;
+  padding: 5px;
+  justify-content: center;
+  border-radius: 10px;
+  max-height: 200px;
+  position: sticky;
+  top: 80px;
+  border: 2px solid red;
+  align-items: center;
+}
+
+.layout-container {
+  padding: 0 30px;
 }

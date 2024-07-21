@@ -7,14 +7,29 @@ import {
 } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
-import { useMethod } from "../../hooks/useMethod";
+
+import { CiDark } from "react-icons/ci";
+import { CiLight } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import { colorTheme } from "../../features/theme/themeSlice";
 
 const NavBar = () => {
   const admin = useSelector((state) => state.currentSlice.currentData.admin);
-  const token = useSelector((state) => state.auth.jwt);
-  const id = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
-  const { getAllMails } = useMethod();
+
+  const [select, setSelect] = useState(
+    JSON.parse(localStorage.getItem(`themeStatus`))
+  );
+
+  const toggleTheme = () => {
+    setSelect((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem(`themeStatus`, JSON.stringify(select));
+
+    dispatch(colorTheme(select ? `light` : `dark`));
+  }, [toggleTheme, select]);
 
   return (
     <Navbar>
@@ -53,6 +68,11 @@ const NavBar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
+        <NavbarItem>
+          <div className="theme-icon" onClick={toggleTheme}>
+            {select ? <CiLight /> : <CiDark />}
+          </div>
+        </NavbarItem>
         <NavbarItem>
           <Button color="danger" onClick={() => dispatch(logout())}>
             Logout

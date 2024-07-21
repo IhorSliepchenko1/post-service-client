@@ -3,6 +3,8 @@ import authSlice from "../features/auth/authSlice";
 import errorSlice from "../features/error/errorSlice";
 import validationSlice from "../features/validation/validationSlice";
 import currentSlice from "../features/current/currentSlice";
+import themeSlice from "../features/theme/themeSlice";
+import mailSlice from "../features/mails/mailsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +12,7 @@ export const store = configureStore({
     error: errorSlice,
     validation: validationSlice,
     currentSlice: currentSlice,
+    theme: themeSlice,
+    mails: mailSlice,
   },
 });

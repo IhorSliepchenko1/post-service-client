@@ -1,16 +1,14 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { NextUIProvider } from "@nextui-org/react";
-import { Provider } from "react-redux";
-import { store } from "./store/store";
+import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
+import { useSelector } from "react-redux";
 
 const App = () => {
+  const theme = useSelector((state) => state.theme.color);
+
   return (
-    <Provider store={store}>
-      <NextUIProvider>
-        <RouterProvider router={router} />
-      </NextUIProvider>
-    </Provider>
+    <main className={`${theme} text-foreground bg-background`}>
+      <RouterProvider router={router} />
+    </main>
   );
 };
 
