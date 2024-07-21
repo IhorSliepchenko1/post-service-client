@@ -23,7 +23,7 @@ const MyMails = () => {
   const { universalGet } = useMethod();
 
   const getMails = async () => {
-    const response = await universalGet(token, userId, `mails`);
+    const response = await universalGet(token, userId, `my-mails`);
     dispatch(mailsDataCurrentUser(response.data));
   };
 
