@@ -16,11 +16,7 @@ import { useMethod } from "../../hooks/useMethod";
 
 const MyMails = () => {
   const dispatch = useDispatch();
-
   const dataMails = useSelector((state) => state.mails.mailsData);
-  const token = useSelector((state) => state.auth.jwt);
-  const userId = useSelector((state) => state.auth.id);
-
   const { mailsGet } = useMethod();
 
   const [page, setPage] = useState(1);
@@ -37,7 +33,7 @@ const MyMails = () => {
 
   const getMails = async () => {
     setLoading(true);
-    const response = await mailsGet(token, userId, `my-mails`, 10, page);
+    const response = await mailsGet(`my-mails`, 10, page);
     setCountString(response.data.limit);
 
     dispatch(mailsDataCurrentUser(response.data.mails));
@@ -45,7 +41,7 @@ const MyMails = () => {
   };
   useEffect(() => {
     getMails();
-  }, [page, countString, token, userId]);
+  }, [page, countString]);
 
   return (
     <Table

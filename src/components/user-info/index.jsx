@@ -15,21 +15,22 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import InputMail from "../input-mail";
+import { emailStatus } from "../../features/validation/validationSlice";
 
 const UserInfo = () => {
-  const userInfo = useSelector((state) => state.auth);
-  const { universalGet, changeHandler, updateUser } = useMethod();
+  const { universalGet, updateUser, changeHandler } = useMethod();
+
   const dispatch = useDispatch();
-  const dataUser = useSelector((state) => state.currentSlice.currentData);
+  const state = useSelector((state) => state);
+  const { email, name, token } = state.currentSlice.currentData;
 
   const [loading, setLoading] = useState(true);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState("opaque");
 
   const currentUser = async () => {
     setLoading(true);
-    const response = await universalGet(userInfo.jwt, userInfo.id, `current`);
+    const response = await universalGet(`current`);
     dispatch(currentUserData(response.data));
     setLoading(false);
   };
@@ -47,13 +48,9 @@ const UserInfo = () => {
     e.preventDefault();
 
     try {
-      const updateUserApi = await updateUser(userInfo.jwt, userInfo.id);
+      const updateUserApi = await updateUser();
+
       return updateUserApi;
-      // if (updateUserApi.statusText === `OK`) {
-      //   dispatch(emailStatus(false));
-      //   dispatch(passwordStatus(false));
-      //   dispatch(errorMessage(``));
-      // }
     } catch (error) {
       console.error(error);
     }
@@ -68,26 +65,32 @@ const UserInfo = () => {
           <CardBody>
             <div className="flex justify-between gap-3">
               <p>Your email: </p>
-              <span>{dataUser.email}</span>
+              <span>{state.currentSlice.currentData.email}</span>
             </div>
             <Divider />
             <div className="flex justify-between">
               <p>Status:</p>
 
-              <span style={{ color: dataUser.admin ? `green` : `red` }}>{`${
-                dataUser.admin ? `admin` : `user`
+              <span
+                style={{
+                  color: state.currentSlice.currentData.admin ? `green` : `red`,
+                }}
+              >{`${
+                state.currentSlice.currentData.admin ? `admin` : `user`
               }`}</span>
             </div>
             <Divider />
             <div className="flex justify-between">
               <p>Your name:</p>
-              <span>{dataUser.name || `-`}</span>
+              <span>{state.currentSlice.currentData.name || `-`}</span>
             </div>
             <Divider />
-            {dataUser.token && (
+            {state.currentSlice.currentData.token && (
               <div className="flex justify-between">
                 <p> Email token:</p>{" "}
-                <span style={{ color: `green` }}>{dataUser?.token}</span>
+                <span style={{ color: `green` }}>
+                  {state.currentSlice.currentData?.token}
+                </span>
               </div>
             )}
             <Divider />
@@ -115,7 +118,10 @@ const UserInfo = () => {
                       onSubmit={handleSubmit}
                       className="flex flex-col gap-4"
                     >
-                      <InputMail changeHandler={changeHandler} />
+                      <InputMail
+                        changeHandler={changeHandler}
+                        defaultValue={email}
+                      />
 
                       <Input
                         type="text"
@@ -125,6 +131,7 @@ const UserInfo = () => {
                         name="name"
                         onChange={changeHandler}
                         className="input-width"
+                        defaultValue={name}
                       />
                       <Input
                         type="text"
@@ -134,6 +141,7 @@ const UserInfo = () => {
                         name="token"
                         onChange={changeHandler}
                         className="input-width"
+                        defaultValue={token}
                       />
                     </form>
                   </ModalBody>

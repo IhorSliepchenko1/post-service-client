@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { emailStatus } from "../../features/validation/validationSlice";
 import { EMAIL_REGEXP } from "../../config";
 
-const InputMail = ({ changeHandler }) => {
+const InputMail = ({ changeHandler, defaultValue }) => {
   const dispatch = useDispatch();
   const [value, setValue] = useState(``);
 
@@ -33,6 +33,7 @@ const InputMail = ({ changeHandler }) => {
       className="input-width"
       name="email"
       onChange={changeHandler}
+      defaultValue={defaultValue}
     />
   );
 };

@@ -20,15 +20,12 @@ const Login = ({ setSelected }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const error = useSelector((state) => state.error.value);
-  const loginState = useSelector((state) => state.validation.email);
-  const passwordState = useSelector((state) => state.validation.password);
+  const state = useSelector((state) => state);
+  const { email, password } = state.validation;
 
   useEffect(() => {
-    loginState && passwordState ? setDisabled(false) : setDisabled(true);
-  }, [loginState, passwordState]);
-
-  useSelector((state) => state.error.value);
+    email && password ? setDisabled(false) : setDisabled(true);
+  }, [email, password]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +49,7 @@ const Login = ({ setSelected }) => {
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <InputMail changeHandler={changeHandler} />
         <InputPassword changeHandler={changeHandler} passMessage={``} />
-        <ErrorMessage error={error} />
+        <ErrorMessage error={state.error.value} />
         <p className="text-center text-small">
           Нет аккаутна?
           <Link

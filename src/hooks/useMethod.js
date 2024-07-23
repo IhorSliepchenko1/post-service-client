@@ -3,11 +3,15 @@ import { useState } from "react";
 import { BASE_URL } from "../config";
 
 import { errorMessage } from "./../features/error/errorSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { currentUserData } from "../features/current/currentSlice";
 
 export const useMethod = () => {
   const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+
+  const { jwt, id } = state.auth;
+
   const [form, setForm] = useState({
     email: "",
     token: "",
@@ -16,10 +20,10 @@ export const useMethod = () => {
 
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
   };
 
-  const universalGet = async (token, userId, api) => {
+  // AXIOS
+  const universalGet = async (api) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/${api}`,
@@ -27,8 +31,10 @@ export const useMethod = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            authorization: token,
-            userId: userId,
+            authorization: jwt,
+          },
+          params: {
+            id,
           },
         }
       );
@@ -38,17 +44,17 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const mailsGet = async (token, userId, api, limit, page) => {
+  const mailsGet = async (api, limit, page) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${api}`, {
         headers: {
           "Content-Type": "application/json",
-          authorization: token,
-          userId: userId,
+          authorization: jwt,
         },
         params: {
           _limit: limit,
           _page: page,
+          id,
         },
       });
 
@@ -57,17 +63,15 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-
-  const updateUser = async (token, userId) => {
+  const updateUser = async () => {
     try {
       const response = await axios.put(
         `${BASE_URL}/api/update-user`,
-        { ...form, userId },
+        { ...form, userId: id },
         {
           headers: {
             "Content-Type": "application/json",
-            authorization: token,
-            userId: userId,
+            authorization: jwt,
           },
         }
       );
@@ -78,6 +82,32 @@ export const useMethod = () => {
       dispatch(errorMessage(err.response.data.error));
     }
   };
+  const createMails = async (mailsInfo, info) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/api/create-mails`,
+        { ...mailsInfo, ...info },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
 
-  return { universalGet, mailsGet, updateUser, changeHandler, updateUser };
+      return response;
+    } catch (error) {
+      console.log(error.response.data.error);
+      dispatch(errorMessage(error.response.data.error));
+    }
+  };
+
+  return {
+    universalGet,
+    mailsGet,
+    updateUser,
+    changeHandler,
+    updateUser,
+    createMails,
+  };
 };
