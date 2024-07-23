@@ -12,6 +12,7 @@ import { CiDark } from "react-icons/ci";
 import { CiLight } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { colorTheme } from "../../features/theme/themeSlice";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const admin = useSelector((state) => state.currentSlice.currentData.admin);
@@ -31,16 +32,26 @@ const NavBar = () => {
     dispatch(colorTheme(select ? `light` : `dark`));
   }, [toggleTheme, select]);
 
+  const navigate = useNavigate();
+
   return (
     <Navbar>
       <NavbarContent className="sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" className="cursor-pointer">
+          <Link
+            color="foreground"
+            className="cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             My mails
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" className="cursor-pointer">
+          <Link
+            color="foreground"
+            className="cursor-pointer"
+            onClick={() => navigate("/create-mails")}
+          >
             Create mail
           </Link>
         </NavbarItem>

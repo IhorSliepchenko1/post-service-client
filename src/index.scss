@@ -28,17 +28,11 @@ header {
 
 .user-card {
   min-width: 385px;
-  line-height: 2;
+  line-height: 3;
   margin-right: 15px;
-  background-color: grey;
-  padding: 5px;
-  justify-content: center;
-  border-radius: 10px;
-  max-height: 200px;
+  max-height: 300px;
   position: sticky;
   top: 80px;
-  border: 2px solid red;
-  align-items: center;
 }
 
 .layout-container {
