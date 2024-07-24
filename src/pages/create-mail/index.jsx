@@ -9,9 +9,11 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useMethod } from "../../hooks/useMethod";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ErrorMessage } from "../../components/error-message";
 import { useSelector } from "react-redux";
+import { IoArrowBack } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const CreateMails = () => {
   const state = useSelector((state) => state);
@@ -25,6 +27,7 @@ const CreateMails = () => {
 
   const { createMails } = useMethod();
   const { email, token, name, id } = state.currentSlice.currentData;
+  const navigate = useNavigate();
 
   const info = {
     from: email,
@@ -58,52 +61,65 @@ const CreateMails = () => {
     }
   };
 
-  useEffect(() => {}, [loading]);
+  const goBack = () => {
+    navigate(-1);
+  };
 
   return (
-    <Card className="mail-container">
-      <CardHeader className="flex flex-col gap-3">
-        <Input
-          type="text"
-          variant="flat"
-          label="Email subject"
-          name="subject"
-          color="primary"
-          value={mailsInfo.subject}
-          onChange={changeHandlerMailsInfo}
-        />
-        <Input
-          type="email"
-          variant="flat"
-          label="Email sender"
-          color="primary"
-          name="to"
-          value={mailsInfo.to}
-          onChange={changeHandlerMailsInfo}
-        />
-      </CardHeader>
-      <CardBody className="flex flex-col gap-3 min-h-56">
-        <Divider />
-        <Textarea
-          variant="bordered"
-          placeholder="Enter your email text..."
-          disableAnimation
-          disableAutosize
-          name="content"
-          value={mailsInfo.content}
-          onChange={changeHandlerMailsInfo}
-          classNames={{
-            input: "resize-y min-h-[400px] textarea",
-          }}
-        />
-        <ErrorMessage error={state.error.value} />
-      </CardBody>
-      <CardFooter className="flex justify-end">
-        <Button color="primary" isLoading={loading} onClick={handleSubmit}>
-          Send
-        </Button>
-      </CardFooter>
-    </Card>
+    <div className="mail-container">
+      <Button
+        color="default"
+        variant="ghost"
+        startContent={<IoArrowBack />}
+        onClick={goBack}
+      >
+        go back
+      </Button>
+
+      <Card className="card-mails">
+        <CardHeader className="flex flex-col gap-3">
+          <Input
+            type="text"
+            variant="flat"
+            label="Email subject"
+            name="subject"
+            color="primary"
+            value={mailsInfo.subject}
+            onChange={changeHandlerMailsInfo}
+          />
+          <Input
+            type="email"
+            variant="flat"
+            label="Email sender"
+            color="primary"
+            name="to"
+            value={mailsInfo.to}
+            onChange={changeHandlerMailsInfo}
+          />
+        </CardHeader>
+        <CardBody className="flex flex-col gap-3 min-h-56">
+          <Divider />
+          <Textarea
+            variant="bordered"
+            placeholder="Enter your email text..."
+            disableAnimation
+            disableAutosize
+            name="content"
+            value={mailsInfo.content}
+            onChange={changeHandlerMailsInfo}
+            classNames={{
+              input: "resize-y min-h-[400px] textarea",
+            }}
+          />
+          <ErrorMessage error={state.error.value} />
+        </CardBody>
+        <CardFooter className="flex justify-end">
+          <Button color="primary" isLoading={loading} onClick={handleSubmit}>
+            Send
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
