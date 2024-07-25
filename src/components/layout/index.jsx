@@ -1,4 +1,4 @@
-import ProtectedRoute from "../../utils/protected";
+import ProtectedRoute from "../protected";
 import NavBar from "../nav-bar";
 import UserInfo from "../user-info";
 import { Outlet } from "react-router-dom";

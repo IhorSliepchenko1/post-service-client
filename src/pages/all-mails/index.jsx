@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 const AllMails = () => {
   const state = useSelector((state) => state);
   const { mailsGet } = useMethod();
-  console.log(state.mailsAll);
+
   return (
     <MailsRender
       api={`mails`}

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL, headers } from "../config";
-import { errorMessage } from "./../features/error/errorSlice";
+import { errorMessage } from "../features/error/errorSlice";
 import { useDispatch } from "react-redux";
 
 export const useLogin = () => {

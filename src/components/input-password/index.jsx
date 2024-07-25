@@ -50,17 +50,3 @@ const InputPassword = ({ changeHandler, passMessage }) => {
 };
 
 export default InputPassword;
-
-//    <Input
-//      placeholder="Enter your email"
-//      type="email"
-//      label="Email"
-//      variant="bordered"
-//      isInvalid={isInvalid}
-//      color={isInvalid ? "danger" : "success"}
-//      errorMessage="Please enter a valid email"
-//      onValueChange={setValue}
-//      className="input-width"
-//      name="email"
-//      onChange={changeHandler}
-//    />;

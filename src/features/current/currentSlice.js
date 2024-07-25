@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentData: {},
-  countMails: 10,
+  countMails: 0,
 };
 
 export const currentSlice = createSlice({

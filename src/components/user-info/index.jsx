@@ -6,6 +6,7 @@ import { Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
 import { Button, useDisclosure } from "@nextui-org/react";
 import ModalEditProfile from "../modal-edit-profile";
+import { MdOutlineEdit } from "react-icons/md";
 
 const UserInfo = () => {
   const { universalGet, updateUser, changeHandler } = useMethod();
@@ -78,7 +79,7 @@ const UserInfo = () => {
             <Divider />
             {state.currentSlice.currentData.token && (
               <div className="flex justify-between">
-                <p> Email token:</p>{" "}
+                <p> Email token:</p>
                 <span style={{ color: `green` }}>
                   {state.currentSlice.currentData?.token}
                 </span>
@@ -95,6 +96,7 @@ const UserInfo = () => {
               color="warning"
               onPress={() => handleOpen(`blur`)}
               className="capitalize"
+              endContent={<MdOutlineEdit />}
             >
               Edit profile
             </Button>

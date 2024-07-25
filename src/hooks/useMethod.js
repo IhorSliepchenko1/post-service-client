@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../config";
 
-import { errorMessage } from "./../features/error/errorSlice";
+import { errorMessage } from "../features/error/errorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserData } from "../features/current/currentSlice";
 

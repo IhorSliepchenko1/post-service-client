@@ -11,7 +11,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       dispatch(errorMessage(""));
-    }, 3000);
+    }, 3500);
   }, [state]);
 
   return (

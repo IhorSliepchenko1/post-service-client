@@ -68,7 +68,11 @@ const NavBar = () => {
         </NavbarItem>
         <NavbarItem>
           {admin && (
-            <Link color="primary" className="cursor-pointer">
+            <Link
+              color="primary"
+              className="cursor-pointer"
+              onClick={() => navigate("/users")}
+            >
               All users
             </Link>
           )}
