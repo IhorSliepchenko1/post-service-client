@@ -4,18 +4,8 @@ import { useEffect, useState } from "react";
 import { currentUserData } from "../../features/current/currentSlice";
 import { Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
-import {
-  Modal,
-  ModalContent,
-  Input,
-  ModalBody,
-  ModalFooter,
-  Button,
-  useDisclosure,
-  ModalHeader,
-} from "@nextui-org/react";
-import InputMail from "../input-mail";
-import { emailStatus } from "../../features/validation/validationSlice";
+import { Button, useDisclosure } from "@nextui-org/react";
+import ModalEditProfile from "../modal-edit-profile";
 
 const UserInfo = () => {
   const { universalGet, updateUser, changeHandler } = useMethod();
@@ -32,12 +22,13 @@ const UserInfo = () => {
     setLoading(true);
     const response = await universalGet(`current`);
     dispatch(currentUserData(response.data));
+
     setLoading(false);
   };
 
   useEffect(() => {
     currentUser();
-  }, []);
+  }, [onClose]);
 
   const handleOpen = (backdrop) => {
     setBackdrop(backdrop);
@@ -108,59 +99,16 @@ const UserInfo = () => {
               Edit profile
             </Button>
           </div>
-          <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
-            <ModalContent>
-              {(onClose) => (
-                <>
-                  <ModalHeader>Edit profile</ModalHeader>
-                  <ModalBody>
-                    <form
-                      onSubmit={handleSubmit}
-                      className="flex flex-col gap-4"
-                    >
-                      <InputMail
-                        changeHandler={changeHandler}
-                        defaultValue={email}
-                      />
-
-                      <Input
-                        type="text"
-                        variant="bordered"
-                        label="Name"
-                        placeholder="Enter your name"
-                        name="name"
-                        onChange={changeHandler}
-                        className="input-width"
-                        defaultValue={name}
-                      />
-                      <Input
-                        type="text"
-                        variant="bordered"
-                        label="Email token"
-                        placeholder="Enter email token"
-                        name="token"
-                        onChange={changeHandler}
-                        className="input-width"
-                        defaultValue={token}
-                      />
-                    </form>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
-                      Close
-                    </Button>
-                    <Button
-                      color="primary"
-                      onPress={onClose}
-                      onClick={handleSubmit}
-                    >
-                      Save
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
+          <ModalEditProfile
+            isOpen={isOpen}
+            onClose={onClose}
+            handleSubmit={handleSubmit}
+            changeHandler={changeHandler}
+            email={email}
+            name={name}
+            token={token}
+            backdrop={backdrop}
+          />
         </CardFooter>
       </Card>
     </>

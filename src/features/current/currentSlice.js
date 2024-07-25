@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currentData: {},
+  countMails: 10,
 };
 
 export const currentSlice = createSlice({
@@ -11,9 +12,13 @@ export const currentSlice = createSlice({
     currentUserData: (state, action) => {
       state.currentData = action.payload;
     },
+
+    countMailsUser: (state, action) => {
+      state.countMails = action.payload;
+    },
   },
 });
 
-export const { currentUserData } = currentSlice.actions;
+export const { currentUserData, countMailsUser } = currentSlice.actions;
 
 export default currentSlice.reducer;

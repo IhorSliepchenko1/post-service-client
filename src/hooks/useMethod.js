@@ -63,6 +63,7 @@ export const useMethod = () => {
       console.error(error);
     }
   };
+
   const updateUser = async () => {
     try {
       const response = await axios.put(

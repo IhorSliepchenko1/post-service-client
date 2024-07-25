@@ -5,6 +5,7 @@ import validationSlice from "../features/validation/validationSlice";
 import currentSlice from "../features/current/currentSlice";
 import themeSlice from "../features/theme/themeSlice";
 import mailSlice from "../features/mails/mailsSlice";
+import mailSliceAll from "../features/all-mails/allMailsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
     currentSlice: currentSlice,
     theme: themeSlice,
     mails: mailSlice,
+    mailsAll: mailSliceAll,
   },
 });

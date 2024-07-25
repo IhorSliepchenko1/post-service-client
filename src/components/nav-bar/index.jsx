@@ -57,7 +57,11 @@ const NavBar = () => {
         </NavbarItem>
         <NavbarItem>
           {admin && (
-            <Link color="primary" className="cursor-pointer">
+            <Link
+              color="primary"
+              className="cursor-pointer"
+              onClick={() => navigate("/all-mails")}
+            >
               All mails
             </Link>
           )}
@@ -66,14 +70,6 @@ const NavBar = () => {
           {admin && (
             <Link color="primary" className="cursor-pointer">
               All users
-            </Link>
-          )}
-        </NavbarItem>
-
-        <NavbarItem>
-          {admin && (
-            <Link color="primary" className="cursor-pointer">
-              Add user
             </Link>
           )}
         </NavbarItem>
