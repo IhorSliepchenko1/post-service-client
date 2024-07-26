@@ -45,7 +45,7 @@ export const useMethod = () => {
     }
   };
 
-  // 
+  //
   const getWithParams = async (api, limit, page) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${api}`, {
@@ -104,6 +104,25 @@ export const useMethod = () => {
     }
   };
 
+  const getUserById = async (id) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/users/${id}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     universalGet,
     getWithParams,
@@ -111,5 +130,6 @@ export const useMethod = () => {
     changeHandler,
     updateUser,
     createMails,
+    getUserById,
   };
 };

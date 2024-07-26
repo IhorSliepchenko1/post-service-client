@@ -61,17 +61,21 @@ const MailsRender = ({
   };
 
   const getMails = async () => {
-    setLoading(true);
-    const response = await get(api, 10, page);
+    try {
+      setLoading(true);
+      const response = await get(api, 10, page);
 
-    const respData = response.data.mails.map((mail) => ({
-      ...mail,
-      createdAt: formatDate(mail.createdAt),
-    }));
+      const respData = response.data.mails.map((mail) => ({
+        ...mail,
+        createdAt: formatDate(mail.createdAt),
+      }));
 
-    dispatch(mailsDataCurrent(respData));
-    dispatch(countMailsDispatch(response.data.limit));
-    setLoading(false);
+      dispatch(mailsDataCurrent(respData));
+      dispatch(countMailsDispatch(response.data.limit));
+      setLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

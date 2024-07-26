@@ -7,6 +7,7 @@ import themeSlice from "../features/theme/themeSlice";
 import mailSlice from "../features/mails/mailsSlice";
 import mailSliceAll from "../features/all-mails/allMailsSlice";
 import usersSliceAll from "../features/all-users/allUsersSlice";
+import userSlice from "../features/user/userSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     mails: mailSlice,
     mailsAll: mailSliceAll,
     usersAll: usersSliceAll,
+    user: userSlice,
   },
 });

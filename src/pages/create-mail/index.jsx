@@ -1,9 +1,6 @@
-import { Button } from "@nextui-org/react";
 import { useMethod } from "../../hooks/useMethod";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { IoArrowBack } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import CreateMailPanel from "../../components/create-mail-panel";
 
 const CreateMails = () => {
@@ -18,7 +15,7 @@ const CreateMails = () => {
 
   const { createMails } = useMethod();
   const { email, token, name, id } = state.currentSlice.currentData;
-  const navigate = useNavigate();
+
 
   const info = {
     from: email,
@@ -54,15 +51,6 @@ const CreateMails = () => {
 
   return (
     <div className="mail-container">
-      <Button
-        color="default"
-        variant="ghost"
-        startContent={<IoArrowBack />}
-        onClick={() => navigate(-1)}
-      >
-        go back
-      </Button>
-
       <CreateMailPanel
         subject={mailsInfo.subject}
         to={mailsInfo.to}

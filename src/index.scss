@@ -30,7 +30,7 @@ header {
   min-width: 385px;
   line-height: 3;
   margin-right: 15px;
-  max-height: 300px;
+  max-height: 350px;
   position: sticky;
   top: 80px;
 }
@@ -55,8 +55,47 @@ header {
 
 .container-table {
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .input-width {
   width: 100px !important;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  width: 66px;
+  justify-content: space-between;
+}
+
+.user-info {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: scale(1.6);
+  }
+}
+
+.acc-info {
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.card-user {
+  margin-top: 20px;
+}
+
+.user-container {
+  margin-inline: auto;
+  min-width: 55%;
+}
+
+.no-info {
+  color: red;
+}
+
+.warning{
+  color: red;
 }

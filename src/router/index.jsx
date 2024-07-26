@@ -4,7 +4,8 @@ import Auth from "./../pages/auth/index";
 import MyMails from "../pages/my-mails";
 import CreateMails from "../pages/create-mail";
 import AllMails from "../pages/all-mails";
-import UsersAll from "./../components/users-all/index";
+import AllUsers from "../pages/all-users/index";
+import User from "./../pages/user/index";
 
 export const router = createBrowserRouter([
   {
@@ -30,11 +31,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/users",
-        element: <UsersAll />,
+        element: <AllUsers />,
       },
       {
         path: "/users/:id",
-        element: <UsersAll />,
+        element: <User />,
       },
     ],
   },

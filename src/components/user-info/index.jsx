@@ -55,6 +55,7 @@ const UserInfo = () => {
           <Spinner label="Loading..." color="warning" />
         ) : (
           <CardBody>
+            <h4 className="acc-info">Account info:</h4>
             <div className="flex justify-between gap-3">
               <p>Your email: </p>
               <span>{state.currentSlice.currentData.email}</span>
