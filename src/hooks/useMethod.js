@@ -44,7 +44,9 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const mailsGet = async (api, limit, page) => {
+
+  // 
+  const getWithParams = async (api, limit, page) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${api}`, {
         headers: {
@@ -63,7 +65,6 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-
   const updateUser = async () => {
     try {
       const response = await axios.put(
@@ -105,7 +106,7 @@ export const useMethod = () => {
 
   return {
     universalGet,
-    mailsGet,
+    getWithParams,
     updateUser,
     changeHandler,
     updateUser,
