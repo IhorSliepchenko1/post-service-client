@@ -5,24 +5,24 @@ import { BASE_URL } from "../config";
 import { errorMessage } from "../features/error/errorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserData } from "../features/current/currentSlice";
+import { logout } from "../features/auth/authSlice";
+import { userData } from "../features/user/userSlice";
 
 export const useMethod = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-
   const { jwt, id } = state.auth;
 
   const [form, setForm] = useState({
     email: "",
     token: "",
     name: "",
+    password: "",
   });
-
   const changeHandler = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    console.log(form);
   };
-
-  // AXIOS
   const universalGet = async (api) => {
     try {
       const response = await axios.get(
@@ -44,8 +44,6 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-
-  //
   const getWithParams = async (api, limit, page) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${api}`, {
@@ -77,8 +75,32 @@ export const useMethod = () => {
           },
         }
       );
+      if (form.password === "") {
+        dispatch(currentUserData(response.data));
+      } else {
+        dispatch(logout());
+      }
 
-      dispatch(currentUserData(response.data));
+      return response;
+    } catch (err) {
+      dispatch(errorMessage(err.response.data.error));
+    }
+  };
+  const updateUserById = async (id) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/api/update-user`,
+        { ...form, userId: id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
+
+      dispatch(userData(response.data));
+
       return response;
     } catch (err) {
       dispatch(errorMessage(err.response.data.error));
@@ -103,7 +125,6 @@ export const useMethod = () => {
       dispatch(errorMessage(error.response.data.error));
     }
   };
-
   const getUserById = async (id) => {
     try {
       const response = await axios.get(
@@ -122,7 +143,42 @@ export const useMethod = () => {
       console.error(error);
     }
   };
+  const deleteAllMailsByUserId = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/delete-mails/${id}`,
 
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const deleteUserById = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/api/users-delete/${id}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return {
     universalGet,
     getWithParams,
@@ -131,5 +187,8 @@ export const useMethod = () => {
     updateUser,
     createMails,
     getUserById,
+    deleteAllMailsByUserId,
+    deleteUserById,
+    updateUserById,
   };
 };

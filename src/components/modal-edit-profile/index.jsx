@@ -8,6 +8,7 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import InputMail from "../input-mail";
+import InputPassword from "./../input-password/index";
 
 const ModalEditProfile = ({
   isOpen,
@@ -28,7 +29,10 @@ const ModalEditProfile = ({
             <ModalBody>
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <InputMail changeHandler={changeHandler} defaultValue={email} />
-
+                <InputPassword
+                  changeHandler={changeHandler}
+                  passMessage={`Minimum length 6 characters`}
+                />
                 <Input
                   type="text"
                   variant="bordered"

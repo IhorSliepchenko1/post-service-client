@@ -19,6 +19,11 @@ const UserInfo = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState("opaque");
 
+  const handleOpen = (backdrop) => {
+    setBackdrop(backdrop);
+    onOpen();
+  };
+
   const currentUser = async () => {
     setLoading(true);
     const response = await universalGet(`current`);
@@ -30,11 +35,6 @@ const UserInfo = () => {
   useEffect(() => {
     currentUser();
   }, [onClose]);
-
-  const handleOpen = (backdrop) => {
-    setBackdrop(backdrop);
-    onOpen();
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

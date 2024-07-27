@@ -59,6 +59,8 @@ const AllUsers = () => {
   return (
     <Table
       aria-label="Example table with client side pagination"
+      color="success"
+      selectionMode="single"
       bottomContent={
         pages > 0 ? (
           <div className="flex justify-center">
