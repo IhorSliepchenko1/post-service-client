@@ -99,6 +99,13 @@ const User = () => {
 
     try {
       const updatedUser = await updateUserById(id);
+      console.log(updatedUser);
+      const respData = {
+        ...updatedUser.data,
+        createdAt: formatDate(updatedUser.data.createdAt),
+      };
+
+      dispatch(userData(respData));
 
       return updatedUser;
     } catch (error) {
@@ -164,18 +171,11 @@ const User = () => {
               <Divider />
 
               {user.admin ? (
-                <div className="flex flex-col">
-                  <h2
-                    className={`p-3 text-center ${
-                      currentId === id ? `your` : `warning`
-                    }`}
-                  >
-                    {currentId === id
-                      ? `your account`
-                      : `This is a peer administrator account, you cannot
-            change information about this admin-user!`}
-                  </h2>
-
+                <div
+                  className={`p-3 text-center ${
+                    currentId === id ? `your` : `warning`
+                  }`}
+                >
                   {currentId === id ? (
                     <Button
                       color="danger"
@@ -187,7 +187,8 @@ const User = () => {
                       Delete My Account <MdDelete />
                     </Button>
                   ) : (
-                    <></>
+                    `This is a peer administrator account, you cannot
+            change information about this admin-user!`
                   )}
                 </div>
               ) : (
