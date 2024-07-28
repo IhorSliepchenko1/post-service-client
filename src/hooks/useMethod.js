@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../config";
-
 import { errorMessage } from "../features/error/errorSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUserData } from "../features/current/currentSlice";
@@ -106,14 +105,26 @@ export const useMethod = () => {
       dispatch(errorMessage(err.response.data.error));
     }
   };
-  const createMails = async (mailsInfo, info) => {
+  const createMails = async (mailsInfo, info, file) => {
     try {
+      const formData = new FormData();
+      formData.append("from", info.from);
+      formData.append("name", info.name);
+      formData.append("token", info.token);
+      formData.append("authorId", info.authorId);
+      formData.append("to", mailsInfo.to);
+      formData.append("subject", mailsInfo.subject);
+      formData.append("content", mailsInfo.content);
+      if (file) {
+        formData.append("file", file);
+      }
+
       const response = await axios.post(
         `${BASE_URL}/api/create-mails`,
-        { ...mailsInfo, ...info },
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             authorization: jwt,
           },
         }

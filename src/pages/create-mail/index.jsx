@@ -7,6 +7,7 @@ const CreateMails = () => {
   const state = useSelector((state) => state);
 
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [mailsInfo, setMailsInfo] = useState({
     to: "",
     subject: "",
@@ -15,7 +16,6 @@ const CreateMails = () => {
 
   const { createMails } = useMethod();
   const { email, token, name, id } = state.currentSlice.currentData;
-
 
   const info = {
     from: email,
@@ -33,7 +33,7 @@ const CreateMails = () => {
     setLoading(true);
     e.preventDefault();
     try {
-      const response = await createMails(mailsInfo, info);
+      const response = await createMails(mailsInfo, info, selectedFile);
 
       if (response) {
         setMailsInfo({
@@ -58,6 +58,7 @@ const CreateMails = () => {
         changeHandlerMailsInfo={changeHandlerMailsInfo}
         loading={loading}
         handleSubmit={handleSubmit}
+        setSelectedFile={setSelectedFile}
       />
     </div>
   );

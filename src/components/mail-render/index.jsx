@@ -18,6 +18,7 @@ import { FaDownload } from "react-icons/fa";
 import { useCreateFile } from "./../../hooks/useCreateFile";
 import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
+import { BASE_URL } from "../../config";
 
 const MailsRender = ({
   api,
@@ -113,7 +114,6 @@ const MailsRender = ({
     fileGenerate(respData);
     return response;
   };
-
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>
@@ -199,6 +199,7 @@ const MailsRender = ({
         date={contentMails.date}
         sender={contentMails.sender}
         recipient={contentMails.recipient}
+        file={contentMails.pdfUrl}
       />
     </div>
   );

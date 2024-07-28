@@ -7,6 +7,7 @@ import {
   ModalFooter,
   Divider,
 } from "@nextui-org/react";
+import { BASE_URL } from "../../config";
 
 const ModalMailContent = ({
   isOpen,
@@ -16,6 +17,7 @@ const ModalMailContent = ({
   date,
   sender,
   recipient,
+  file,
 }) => {
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -37,6 +39,7 @@ const ModalMailContent = ({
                 <strong>recipient: </strong>
                 {recipient}
               </p>
+
               <Divider />
               {contentMails}
             </ModalBody>

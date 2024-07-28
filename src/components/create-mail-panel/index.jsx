@@ -18,8 +18,13 @@ const CreateMailPanel = ({
   changeHandlerMailsInfo,
   loading,
   handleSubmit,
+  setSelectedFile,
 }) => {
   const state = useSelector((state) => state);
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
 
   return (
     <Card className="card-mails">
@@ -57,6 +62,7 @@ const CreateMailPanel = ({
             input: "resize-y min-h-[400px] textarea",
           }}
         />
+        <input type="file" name="file" onChange={handleFileChange} />
         <ErrorMessage error={state.error.value} />
       </CardBody>
       <CardFooter className="flex justify-end">
