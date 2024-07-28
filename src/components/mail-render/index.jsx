@@ -58,6 +58,7 @@ const MailsRender = ({
       date: contentData.createdAt,
       sender: contentData.from,
       recipient: contentData.to,
+      pdfUrl: contentData.pdfUrl,
     });
   };
 
@@ -114,6 +115,7 @@ const MailsRender = ({
     fileGenerate(respData);
     return response;
   };
+
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>

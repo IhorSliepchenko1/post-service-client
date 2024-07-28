@@ -7,7 +7,7 @@ import {
   ModalFooter,
   Divider,
 } from "@nextui-org/react";
-import { BASE_URL } from "../../config";
+import { useMethod } from "../../hooks/useMethod";
 
 const ModalMailContent = ({
   isOpen,
@@ -19,6 +19,8 @@ const ModalMailContent = ({
   recipient,
   file,
 }) => {
+  const { downloadFile } = useMethod();
+
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
@@ -39,7 +41,13 @@ const ModalMailContent = ({
                 <strong>recipient: </strong>
                 {recipient}
               </p>
-
+              {file ? (
+                <Button onClick={() => downloadFile(file)}>
+                  Download File
+                </Button>
+              ) : (
+                <></>
+              )}
               <Divider />
               {contentMails}
             </ModalBody>
