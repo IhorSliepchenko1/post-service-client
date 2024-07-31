@@ -1,44 +1,43 @@
-import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { login, idCurrent } from "../../features/auth/authSlice";
-import { useSelector, useDispatch } from "react-redux";
-
-import { useLogin } from "../../hooks/useLogin";
 import { Button, Link } from "@nextui-org/react";
+import { useSelector, useDispatch } from "react-redux";
 import { ErrorMessage } from "../error-message";
-import InputMail from "../input-mail";
 import InputPassword from "../input-password";
-import { useEffect, useState } from "react";
-import {
-  emailStatus,
-  passwordStatus,
-} from "../../features/validation/validationSlice";
+import { useMethod } from "../../hooks/useMethod";
+import InputEmail from "../input-email";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ setSelected }) => {
-  const { changeHandler, apiHandler } = useLogin();
-  const [disabled, setDisabled] = useState(true);
+const Registration = ({ setSelected }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: `onChange`,
+    reValidateMode: `onBlur`,
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+      adminToken: "",
+      token: "",
+    },
+  });
 
+  const { userAuth } = useMethod();
+  const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const state = useSelector((state) => state);
-  const { email, password } = state.validation;
-
-  useEffect(() => {
-    email && password ? setDisabled(false) : setDisabled(true);
-  }, [email, password]);
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      const loginApi = await apiHandler();
-
-      dispatch(login(loginApi.data.token));
-      dispatch(idCurrent(loginApi.data.userId));
-      dispatch(emailStatus(false));
-      dispatch(passwordStatus(false));
-
-      navigate("/");
+      const response = await userAuth("login", data);
+      if (response.statusText === `OK`) {
+        dispatch(login(response.data.token));
+        dispatch(idCurrent(response.data.userId));
+        navigate("/");
+      }
     } catch (err) {
       console.error(err);
     }
@@ -46,23 +45,33 @@ const Login = ({ setSelected }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4">
-        <InputMail changeHandler={changeHandler} />
-        <InputPassword changeHandler={changeHandler} passMessage={``} />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <InputEmail
+          control={control}
+          errorMessage={errors.email?.message ?? ""}
+          isInvalid={errors.email ?? ""}
+        />
+        <InputPassword
+          control={control}
+          isInvalid={errors.password ?? ""}
+          errorMessage={errors.password?.message ?? ""}
+        />
+
         <ErrorMessage error={state.error.value} />
+
         <p className="text-center text-small">
-          Нет аккаутна?
+          Нет аккаунта?
           <Link
             size="sm"
             className="cursor-pointer"
-            onPress={() => setSelected("sign-up")}
+            onPress={() => setSelected("register")}
           >
             Зарегистрироваться
           </Link>
         </p>
 
         <div className="flex gap-2 justify-end">
-          <Button fullWidth color="primary" type="submit" isDisabled={disabled}>
+          <Button fullWidth color="primary" type="submit">
             Войти
           </Button>
         </div>
@@ -71,4 +80,4 @@ const Login = ({ setSelected }) => {
   );
 };
 
-export default Login;
+export default Registration;

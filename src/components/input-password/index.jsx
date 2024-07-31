@@ -1,50 +1,50 @@
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import { useState, useMemo, useEffect } from "react";
 import { Input } from "@nextui-org/react";
-import { useDispatch } from "react-redux";
-import { passwordStatus } from "../../features/validation/validationSlice";
+import { Controller } from "react-hook-form";
+import ValidationError from "../validation-error";
+import { useState } from "react";
 
-const InputPassword = ({ changeHandler, passMessage }) => {
-  const dispatch = useDispatch();
-
+const InputPassword = ({ control, isInvalid, errorMessage }) => {
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [isVisible, setIsVisible] = useState(false);
-  const [value, setValue] = useState(``);
-  const validate = (value) => value.length >= 6;
-
-  const isInvalid = useMemo(() => {
-    if (value === "") return false;
-    return validate(value) ? false : true;
-  }, [value]);
-
-  useEffect(() => {
-    dispatch(passwordStatus(value.length >= 6 ? true : false));
-  }, [isInvalid, value]);
 
   return (
-    <Input
-      label="Password"
-      variant="bordered"
-      isInvalid={isInvalid}
-      color={isInvalid ? "danger" : "success"}
-      errorMessage={passMessage}
-      onValueChange={setValue}
-      placeholder="Enter your password"
+    <Controller
       name="password"
-      endContent={
-        <button
-          className="focus:outline-none"
-          type="button"
-          onClick={toggleVisibility}
-          aria-label="toggle password visibility"
-        >
-          {isVisible ? <FaRegEye /> : <FaRegEyeSlash />}
-        </button>
-      }
-      type={isVisible ? "text" : "password"}
-      onChange={changeHandler}
-      className="input-width"
+      control={control}
+      rules={{
+        minLength: {
+          value: 6,
+          message: "Минимальная длина пароля 6 символов!",
+        },
+      }}
+      render={({ field }) => (
+        <>
+          <Input
+            {...field}
+            label="Пароль"
+            name="password"
+            variant="bordered"
+            isInvalid={isInvalid}
+            color={isInvalid ? "danger" : "success"}
+            placeholder="Придумайте пароль"
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={toggleVisibility}
+                aria-label="toggle password visibility"
+              >
+                {isVisible ? <FaRegEye /> : <FaRegEyeSlash />}
+              </button>
+            }
+            type={isVisible ? "text" : "password"}
+            className="input-width"
+          />
+          {isInvalid && <ValidationError text={errorMessage} />}
+        </>
+      )}
     />
   );
 };

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 import { BASE_URL } from "../config";
 import { errorMessage } from "../features/error/errorSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,16 +11,25 @@ export const useMethod = () => {
   const state = useSelector((state) => state);
   const { jwt, id } = state.auth;
 
-  const [form, setForm] = useState({
-    email: "",
-    token: "",
-    name: "",
-    password: "",
-  });
-  const changeHandler = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form);
+  let changeHandler = () => {
+    console.log(12);
   };
+
+  // регистрация и логин
+  const userAuth = async (router, data) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/${router}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response;
+    } catch (err) {
+      dispatch(errorMessage(err.response.data.error));
+    }
+  };
+
   const universalGet = async (api) => {
     try {
       const response = await axios.get(
@@ -212,6 +220,7 @@ export const useMethod = () => {
   };
 
   return {
+    userAuth,
     universalGet,
     getWithParams,
     updateUser,

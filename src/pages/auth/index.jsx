@@ -20,7 +20,7 @@ const Auth = () => {
               <Tab key="login" title="Вход">
                 <Login setSelected={setSelected} />
               </Tab>
-              <Tab key="sign-up" title="Регистрация">
+              <Tab key="register" title="Регистрация">
                 <Registration setSelected={setSelected} />
               </Tab>
             </Tabs>

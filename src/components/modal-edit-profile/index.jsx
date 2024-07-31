@@ -7,7 +7,7 @@ import {
   Button,
   ModalHeader,
 } from "@nextui-org/react";
-import InputMail from "../input-mail";
+import InputMail from "../input-email";
 import InputPassword from "./../input-password/index";
 
 const ModalEditProfile = ({
