@@ -7,64 +7,100 @@ import {
   Button,
   ModalHeader,
 } from "@nextui-org/react";
-import InputMail from "../input-email";
-import InputPassword from "./../input-password/index";
+import { useForm } from "react-hook-form";
+import { useMethod } from "../../hooks/useMethod";
+import InputEmail from "../input-email";
+import InputPassword from "../input-password";
 
 const ModalEditProfile = ({
   isOpen,
   onClose,
-  handleSubmit,
-  changeHandler,
+  backdrop,
   email,
   name,
   token,
-  backdrop,
 }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: `onChange`,
+    // reValidateMode: `onBlur`,
+    defaultValues: {
+      email: email,
+      password: "",
+      name: name,
+      token: token,
+    },
+  });
+
+  const { updateUser } = useMethod();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await updateUser(data);
+
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
       <ModalContent>
-        {(onClose) => (
-          <>
-            <ModalHeader>Edit profile</ModalHeader>
-            <ModalBody>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <InputMail changeHandler={changeHandler} defaultValue={email} />
-                <InputPassword
-                  changeHandler={changeHandler}
-                  passMessage={`Minimum length 6 characters`}
-                />
-                <Input
-                  type="text"
-                  variant="bordered"
-                  label="Name"
-                  placeholder="Enter your name"
-                  name="name"
-                  onChange={changeHandler}
-                  className="input-width"
-                  defaultValue={name}
-                />
-                <Input
-                  type="text"
-                  variant="bordered"
-                  label="Email token"
-                  placeholder="Enter email token"
-                  name="token"
-                  onChange={changeHandler}
-                  className="input-width"
-                  defaultValue={token}
-                />
-              </form>
-            </ModalBody>
+        <ModalHeader>Edit profile</ModalHeader>
+        <ModalBody>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <InputEmail
+              control={control}
+              defaultValue={email}
+              errorMessage={errors.email?.message}
+              isInvalid={errors.email}
+            />
+
+            <InputPassword
+              control={control}
+              isInvalid={errors.password}
+              errorMessage={errors.password?.message}
+            />
+
+            <Input
+              control={control}
+              name="name"
+              type="text"
+              variant="bordered"
+              label="Имя"
+              placeholder="Введите ваше имя"
+              className="input-width"
+              defaultValue={name}
+            />
+
+            <Input
+              control={control}
+              name="token"
+              type="text"
+              variant="bordered"
+              label="Email токен"
+              placeholder="Введите токен от вашего email"
+              className="input-width"
+              defaultValue={token}
+            />
+
             <ModalFooter>
               <Button color="danger" variant="light" onPress={onClose}>
                 Close
               </Button>
-              <Button color="primary" onPress={onClose} onClick={handleSubmit}>
+              <Button color="primary" type="submit" onPress={onClose}>
                 Save
               </Button>
             </ModalFooter>
-          </>
-        )}
+          </form>
+        </ModalBody>
       </ModalContent>
     </Modal>
   );

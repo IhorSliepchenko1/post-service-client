@@ -9,12 +9,11 @@ import ModalEditProfile from "../modal-edit-profile";
 import { MdOutlineEdit } from "react-icons/md";
 
 const UserInfo = () => {
-  const { universalGet, updateUser, changeHandler } = useMethod();
+  const { getInformation } = useMethod();
 
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { email, name, token } = state.currentSlice.currentData;
-
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [backdrop, setBackdrop] = useState("opaque");
@@ -26,27 +25,14 @@ const UserInfo = () => {
 
   const currentUser = async () => {
     setLoading(true);
-    const response = await universalGet(`current`);
+    const response = await getInformation(`current`);
     dispatch(currentUserData(response.data));
-
     setLoading(false);
   };
 
   useEffect(() => {
     currentUser();
   }, [onClose]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const updateUserApi = await updateUser();
-
-      return updateUserApi;
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <>
@@ -105,12 +91,10 @@ const UserInfo = () => {
           <ModalEditProfile
             isOpen={isOpen}
             onClose={onClose}
-            handleSubmit={handleSubmit}
-            changeHandler={changeHandler}
+            backdrop={backdrop}
             email={email}
             name={name}
             token={token}
-            backdrop={backdrop}
           />
         </CardFooter>
       </Card>

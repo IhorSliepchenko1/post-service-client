@@ -30,7 +30,7 @@ export const useMethod = () => {
     }
   };
 
-  const universalGet = async (api) => {
+  const getInformation = async (api) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/${api}`,
@@ -70,11 +70,11 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const updateUser = async () => {
+  const updateUser = async (data) => {
     try {
       const response = await axios.put(
         `${BASE_URL}/api/update-user`,
-        { ...form, userId: id },
+        { ...data, userId: id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export const useMethod = () => {
           },
         }
       );
-      if (form.password === "") {
+      if (data.password === "") {
         dispatch(currentUserData(response.data));
       } else {
         dispatch(logout());
@@ -93,11 +93,11 @@ export const useMethod = () => {
       dispatch(errorMessage(err.response.data.error));
     }
   };
-  const updateUserById = async (id) => {
+  const updateUserById = async (id, data) => {
     try {
       const response = await axios.put(
         `${BASE_URL}/api/update-user`,
-        { ...form, userId: id },
+        { ...data, userId: id },
         {
           headers: {
             "Content-Type": "application/json",
@@ -144,6 +144,7 @@ export const useMethod = () => {
       dispatch(errorMessage(error.response.data.error));
     }
   };
+
   const getUserById = async (id) => {
     try {
       const response = await axios.get(
@@ -221,11 +222,10 @@ export const useMethod = () => {
 
   return {
     userAuth,
-    universalGet,
+    getInformation,
     getWithParams,
     updateUser,
     changeHandler,
-    updateUser,
     createMails,
     getUserById,
     deleteAllMailsByUserId,

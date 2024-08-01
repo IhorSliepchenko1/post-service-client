@@ -19,9 +19,6 @@ const Registration = ({ setSelected }) => {
     defaultValues: {
       email: "",
       password: "",
-      name: "",
-      adminToken: "",
-      token: "",
     },
   });
 
@@ -44,39 +41,37 @@ const Registration = ({ setSelected }) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <InputEmail
-          control={control}
-          errorMessage={errors.email?.message ?? ""}
-          isInvalid={errors.email ?? ""}
-        />
-        <InputPassword
-          control={control}
-          isInvalid={errors.password ?? ""}
-          errorMessage={errors.password?.message ?? ""}
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <InputEmail
+        control={control}
+        errorMessage={errors.email?.message}
+        isInvalid={errors.email}
+      />
+      <InputPassword
+        control={control}
+        isInvalid={errors.password}
+        errorMessage={errors.password?.message}
+      />
 
-        <ErrorMessage error={state.error.value} />
+      <ErrorMessage error={state.error.value} />
 
-        <p className="text-center text-small">
-          Нет аккаунта?
-          <Link
-            size="sm"
-            className="cursor-pointer"
-            onPress={() => setSelected("register")}
-          >
-            Зарегистрироваться
-          </Link>
-        </p>
+      <p className="text-center text-small">
+        Нет аккаунта?
+        <Link
+          size="sm"
+          className="cursor-pointer"
+          onPress={() => setSelected("register")}
+        >
+          Зарегистрироваться
+        </Link>
+      </p>
 
-        <div className="flex gap-2 justify-end">
-          <Button fullWidth color="primary" type="submit">
-            Войти
-          </Button>
-        </div>
-      </form>
-    </>
+      <div className="flex gap-2 justify-end">
+        <Button fullWidth color="primary" type="submit">
+          Войти
+        </Button>
+      </div>
+    </form>
   );
 };
 

@@ -1,12 +1,12 @@
 import { Input } from "@nextui-org/react";
 import { Controller } from "react-hook-form";
-import ValidationError from "../validation-error";
 import { EMAIL_REGEXP } from "../../config";
 
-const InputEmail = ({ control, errorMessage, isInvalid }) => {
+const InputEmail = ({ control, errorMessage, isInvalid, defaultValue }) => {
   return (
     <Controller
       name="email"
+      defaultValue={defaultValue}
       control={control}
       rules={{
         pattern: {
@@ -15,20 +15,19 @@ const InputEmail = ({ control, errorMessage, isInvalid }) => {
         },
       }}
       render={({ field }) => (
-        <>
-          <Input
-            {...field}
-            type="email"
-            variant="bordered"
-            isInvalid={isInvalid}
-            placeholder="Введите свой email"
-            label="Email"
-            color={isInvalid ? "danger" : "success"}
-          />
-          {isInvalid && <ValidationError text={errorMessage} />}
-        </>
+        <Input
+          {...field}
+          type="email"
+          variant="bordered"
+          isInvalid={isInvalid}
+          placeholder="Введите ваш email"
+          label="Email"
+          color={isInvalid ? "danger" : "success"}
+          errorMessage={errorMessage}
+        />
       )}
     />
   );
 };
+
 export default InputEmail;

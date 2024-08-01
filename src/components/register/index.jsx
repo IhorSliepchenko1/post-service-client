@@ -44,21 +44,21 @@ const Registration = ({ setSelected }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <InputEmail
           control={control}
-          errorMessage={errors.email?.message ?? ""}
-          isInvalid={errors.email ?? ""}
+          errorMessage={errors.email?.message}
+          isInvalid={errors.email}
         />
         <InputPassword
           control={control}
-          isInvalid={errors.password ?? ""}
-          errorMessage={errors.password?.message ?? ""}
+          isInvalid={errors.password}
+          errorMessage={errors.password?.message}
         />
 
         <Input
           control={control}
           type="text"
           variant="bordered"
-          label="Name"
-          placeholder="Enter your name"
+          label="Имя"
+          placeholder="Введите ваше имя"
           name="name"
           className="input-width"
         />
@@ -66,8 +66,8 @@ const Registration = ({ setSelected }) => {
           control={control}
           type="text"
           variant="bordered"
-          label="Admin token"
-          placeholder="Enter admin token"
+          label="Админ токен"
+          placeholder="Введите ключ администратора"
           name="adminToken"
           className="input-width"
         />
@@ -75,8 +75,8 @@ const Registration = ({ setSelected }) => {
           control={control}
           type="text"
           variant="bordered"
-          label="Email token"
-          placeholder="Enter email token"
+          label="Email токен"
+          placeholder="Введите токен от вашего email"
           name="token"
           className="input-width"
         />
