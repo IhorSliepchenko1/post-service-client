@@ -11,11 +11,7 @@ export const useMethod = () => {
   const state = useSelector((state) => state);
   const { jwt, id } = state.auth;
 
-  let changeHandler = () => {
-    console.log(12);
-  };
-
-  // регистрация и логин
+  // POST
   const userAuth = async (router, data) => {
     try {
       const response = await axios.post(`${BASE_URL}/api/${router}`, data, {
@@ -29,8 +25,40 @@ export const useMethod = () => {
       dispatch(errorMessage(err.response.data.error));
     }
   };
+  const createMails = async (data, file) => {
+    try {
+      const formData = new FormData();
+      formData.append("from", data.from);
+      formData.append("name", data.name);
+      formData.append("token", data.token);
+      formData.append("authorId", data.authorId);
+      formData.append("to", data.to);
+      formData.append("subject", data.subject);
+      formData.append("content", data.content);
+      if (file) {
+        formData.append("file", file);
+      }
 
-  const getInformation = async (api) => {
+      const response = await axios.post(
+        `${BASE_URL}/api/create-mails`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            authorization: jwt,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.log(error.response.data.error);
+      dispatch(errorMessage(error.response.data.error));
+    }
+  };
+
+  // GET
+  const getCurrentInfo = async (api) => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/${api}`,
@@ -51,7 +79,7 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const getWithParams = async (api, limit, page) => {
+  const getPages = async (api, limit, page) => {
     try {
       const response = await axios.get(`${BASE_URL}/api/${api}`, {
         headers: {
@@ -70,7 +98,47 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const updateUser = async (data) => {
+  const downloadFile = async (file) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/download/${encodeURIComponent(file)}`,
+        {
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", file);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Ошибка при скачивании файла:", error);
+    }
+  };
+  const getUserById = async (id) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/users/${id}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            authorization: jwt,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // PUT
+  const updateCurrentUser = async (data) => {
     try {
       const response = await axios.put(
         `${BASE_URL}/api/update-user`,
@@ -113,56 +181,8 @@ export const useMethod = () => {
       dispatch(errorMessage(err.response.data.error));
     }
   };
-  const createMails = async (mailsInfo, info, file) => {
-    try {
-      const formData = new FormData();
-      formData.append("from", info.from);
-      formData.append("name", info.name);
-      formData.append("token", info.token);
-      formData.append("authorId", info.authorId);
-      formData.append("to", mailsInfo.to);
-      formData.append("subject", mailsInfo.subject);
-      formData.append("content", mailsInfo.content);
-      if (file) {
-        formData.append("file", file);
-      }
 
-      const response = await axios.post(
-        `${BASE_URL}/api/create-mails`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            authorization: jwt,
-          },
-        }
-      );
-
-      return response;
-    } catch (error) {
-      console.log(error.response.data.error);
-      dispatch(errorMessage(error.response.data.error));
-    }
-  };
-
-  const getUserById = async (id) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/users/${id}`,
-
-        {
-          headers: {
-            "Content-Type": "application/json",
-            authorization: jwt,
-          },
-        }
-      );
-
-      return response;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // DELETE
   const deleteAllMailsByUserId = async (id) => {
     try {
       const response = await axios.delete(
@@ -199,38 +219,20 @@ export const useMethod = () => {
       console.error(error);
     }
   };
-  const downloadFile = async (file) => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/download/${encodeURIComponent(file)}`,
-        {
-          responseType: "blob",
-        }
-      );
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", file);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error("Ошибка при скачивании файла:", error);
-    }
-  };
 
   return {
     userAuth,
-    getInformation,
-    getWithParams,
-    updateUser,
-    changeHandler,
     createMails,
+
+    getCurrentInfo,
+    getPages,
+    downloadFile,
     getUserById,
+
+    updateCurrentUser,
+    updateUserById,
+
     deleteAllMailsByUserId,
     deleteUserById,
-    updateUserById,
-    downloadFile,
   };
 };

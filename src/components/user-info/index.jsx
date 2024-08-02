@@ -9,24 +9,29 @@ import ModalEditProfile from "../modal-edit-profile";
 import { MdOutlineEdit } from "react-icons/md";
 
 const UserInfo = () => {
-  const { getInformation } = useMethod();
+  const { getCurrentInfo, updateCurrentUser } = useMethod();
 
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { email, name, token } = state.currentSlice.currentData;
+
   const [loading, setLoading] = useState(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [backdrop, setBackdrop] = useState("opaque");
 
-  const handleOpen = (backdrop) => {
-    setBackdrop(backdrop);
-    onOpen();
+  const onSubmit = async (data) => {
+    try {
+      await updateCurrentUser(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const currentUser = async () => {
     setLoading(true);
-    const response = await getInformation(`current`);
+
+    const response = await getCurrentInfo(`current`);
     dispatch(currentUserData(response.data));
+
     setLoading(false);
   };
 
@@ -81,7 +86,7 @@ const UserInfo = () => {
             <Button
               variant="flat"
               color="warning"
-              onPress={() => handleOpen(`blur`)}
+              onPress={() => onOpen()}
               className="capitalize"
               endContent={<MdOutlineEdit />}
             >
@@ -89,9 +94,9 @@ const UserInfo = () => {
             </Button>
           </div>
           <ModalEditProfile
+            onSubmit={onSubmit}
             isOpen={isOpen}
             onClose={onClose}
-            backdrop={backdrop}
             email={email}
             name={name}
             token={token}

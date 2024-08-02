@@ -3,10 +3,10 @@ import { login, idCurrent } from "../../features/auth/authSlice";
 import { Button, Link } from "@nextui-org/react";
 import { useSelector, useDispatch } from "react-redux";
 import { ErrorMessage } from "../error-message";
-import InputPassword from "../input-password";
 import { useMethod } from "../../hooks/useMethod";
-import InputEmail from "../input-email";
 import { useNavigate } from "react-router-dom";
+import InputBasic from "../input";
+import InputPassword from "../input-password";
 
 const Registration = ({ setSelected }) => {
   const {
@@ -21,7 +21,6 @@ const Registration = ({ setSelected }) => {
       password: "",
     },
   });
-
   const { userAuth } = useMethod();
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -42,16 +41,15 @@ const Registration = ({ setSelected }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <InputEmail
+      <InputBasic
         control={control}
-        errorMessage={errors.email?.message}
-        isInvalid={errors.email}
+        placeholder="Введите email"
+        label="Email"
+        name="email"
+        type="email"
+        className="input-width"
       />
-      <InputPassword
-        control={control}
-        isInvalid={errors.password}
-        errorMessage={errors.password?.message}
-      />
+      <InputPassword placeholder={`Введите пароль`} control={control} />
 
       <ErrorMessage error={state.error.value} />
 

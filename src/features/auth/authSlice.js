@@ -20,6 +20,7 @@ export const authSlice = createSlice({
     logout: (state) => {
       localStorage.removeItem("jwt");
       localStorage.removeItem("id");
+      location.reload();
       state.jwt = null;
       state.id = null;
     },

@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { Button, Link } from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import { ErrorMessage } from "../error-message";
-import InputPassword from "../input-password";
 import { useMethod } from "../../hooks/useMethod";
-import InputEmail from "../input-email";
+import InputBasic from "../input";
+import InputPassword from "../input-password";
 
 const Registration = ({ setSelected }) => {
   const {
@@ -42,16 +42,15 @@ const Registration = ({ setSelected }) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-        <InputEmail
+        <InputBasic
           control={control}
-          errorMessage={errors.email?.message}
-          isInvalid={errors.email}
+          placeholder="Введите email"
+          label="Email"
+          name="email"
+          type="email"
+          className="input-width"
         />
-        <InputPassword
-          control={control}
-          isInvalid={errors.password}
-          errorMessage={errors.password?.message}
-        />
+        <InputPassword placeholder={`Введите пароль`} control={control} />
 
         <Input
           control={control}

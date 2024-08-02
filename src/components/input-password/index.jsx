@@ -1,47 +1,30 @@
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import { Input } from "@nextui-org/react";
-import { Controller } from "react-hook-form";
 import { useState } from "react";
+import InputBasic from "../input";
 
-const InputPassword = ({ control, errorMessage, isInvalid }) => {
+const InputPassword = ({ control, placeholder }) => {
   const toggleVisibility = () => setIsVisible(!isVisible);
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <Controller
-      name="password"
+    <InputBasic
+      className="input-width"
       control={control}
-      rules={{
-        minLength: {
-          value: 6,
-          message: "Минимальная длина пароля 6 символов!",
-        },
-      }}
-      render={({ field }) => (
-        <Input
-          {...field}
-          label="Пароль"
-          name="password"
-          variant="bordered"
-          isInvalid={isInvalid}
-          color={isInvalid ? "danger" : "success"}
-          placeholder="Введите ваш пароль"
-          endContent={
-            <button
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleVisibility}
-              aria-label="toggle password visibility"
-            >
-              {isVisible ? <FaRegEye /> : <FaRegEyeSlash />}
-            </button>
-          }
-          errorMessage={errorMessage}
-          type={isVisible ? "text" : "password"}
-          className="input-width"
-        />
-      )}
+      placeholder={placeholder}
+      label="Пароль"
+      name="password"
+      type={!isVisible ? "password" : "text"}
+      endContent={
+        <button
+          className="focus:outline-none"
+          type="button"
+          onClick={toggleVisibility}
+          aria-label="toggle password visibility"
+        >
+          {isVisible ? <FaRegEye /> : <FaRegEyeSlash />}
+        </button>
+      }
     />
   );
 };

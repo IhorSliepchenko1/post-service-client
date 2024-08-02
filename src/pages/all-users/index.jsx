@@ -22,7 +22,7 @@ import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AllUsers = () => {
-  const { getWithParams } = useMethod();
+  const { getPages } = useMethod();
   const { formatDate } = useConvertDate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
@@ -40,7 +40,7 @@ const AllUsers = () => {
 
   const getUsers = async () => {
     setLoading(true);
-    const response = await getWithParams(`/users`, 10, page);
+    const response = await getPages(`/users`, 10, page);
 
     const respData = response.data.users.map((user) => ({
       ...user,

@@ -7,9 +7,9 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 
-const ModalDeleteProfile = ({ isOpen, handleDelete, backdrop, onClose }) => {
+const ModalDeleteProfile = ({ isOpen, handleDelete, onClose }) => {
   return (
-    <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         {(onClose) => (
           <>

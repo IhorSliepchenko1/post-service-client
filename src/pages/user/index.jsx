@@ -27,7 +27,6 @@ const User = () => {
     deleteAllMailsByUserId,
     deleteUserById,
     updateUserById,
-    changeHandler,
   } = useMethod();
   const navigate = useNavigate();
   const { formatDate } = useConvertDate();
@@ -37,22 +36,18 @@ const User = () => {
   const currentId = state.auth.id;
   const [loading, setLoading] = useState(true);
   const [userDelete, setUserDelete] = useState(null);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [backdrop, setBackdrop] = useState("opaque");
   const [modal, setModal] = useState(0);
 
-  const handleOpenDel = (backdrop) => {
+  const handleOpenDel = () => {
     setModal(0);
     setModal(1);
-    setBackdrop(backdrop);
     onOpen();
   };
 
-  const handleOpenEdit = (backdrop) => {
+  const handleOpenEdit = () => {
     setModal(0);
     setModal(2);
-    setBackdrop(backdrop);
     onOpen();
   };
 
@@ -94,12 +89,10 @@ const User = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const onSubmit = async (data) => {
     try {
-      const updatedUser = await updateUserById(id);
-      console.log(updatedUser);
+      const updatedUser = await updateUserById(id, data);
+
       const respData = {
         ...updatedUser.data,
         createdAt: formatDate(updatedUser.data.createdAt),
@@ -180,7 +173,7 @@ const User = () => {
                     <Button
                       color="danger"
                       onPress={() => {
-                        handleOpenDel(`blur`);
+                        handleOpenDel();
                         dispatch(logout());
                       }}
                     >
@@ -193,14 +186,11 @@ const User = () => {
                 </div>
               ) : (
                 <CardFooter className="flex justify-between">
-                  <Button
-                    color="warning"
-                    onPress={() => handleOpenEdit(`blur`)}
-                  >
+                  <Button color="warning" onPress={() => handleOpenEdit()}>
                     Edit
                     <MdOutlineEdit />
                   </Button>
-                  <Button color="danger" onPress={() => handleOpenDel(`blur`)}>
+                  <Button color="danger" onPress={() => handleOpenDel()}>
                     Delete <MdDelete />
                   </Button>
                 </CardFooter>
@@ -214,19 +204,16 @@ const User = () => {
         <ModalDeleteProfile
           isOpen={isOpen}
           handleDelete={deeteMailsAndUser}
-          backdrop={backdrop}
           onClose={onClose}
         />
       ) : (
         <ModalEditProfile
+          onSubmit={onSubmit}
           isOpen={isOpen}
           onClose={onClose}
-          handleSubmit={handleSubmit}
-          changeHandler={changeHandler}
           email={user.email}
           name={user.name}
           token={user.token}
-          backdrop={backdrop}
         />
       )}
     </div>

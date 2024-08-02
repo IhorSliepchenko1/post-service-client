@@ -8,12 +8,12 @@ import { useSelector } from "react-redux";
 
 const AllMails = () => {
   const state = useSelector((state) => state);
-  const { getWithParams } = useMethod();
+  const { getPages } = useMethod();
 
   return (
     <MailsRender
       api={`mails`}
-      get={getWithParams}
+      get={getPages}
       countMails={state.mailsAll.mailsCount}
       mailsData={state.mailsAll.mailsDataAll}
       mailsDataCurrent={mailsDataAll}

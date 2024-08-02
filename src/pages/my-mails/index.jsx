@@ -6,11 +6,11 @@ import { countMailsUser } from "../../features/current/currentSlice";
 
 const MyMails = () => {
   const state = useSelector((state) => state);
-  const { getWithParams } = useMethod();
+  const { getPages } = useMethod();
   return (
     <MailsRender
       api={`my-mails`}
-      get={getWithParams}
+      get={getPages}
       countMails={state.currentSlice.countMails}
       mailsData={state.mails.mailsData}
       mailsDataCurrent={mailsDataCurrentUser}

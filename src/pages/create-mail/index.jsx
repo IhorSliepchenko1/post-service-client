@@ -1,66 +1,114 @@
-import { useMethod } from "../../hooks/useMethod";
-import { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Input,
+  Textarea,
+  Button,
+} from "@nextui-org/react";
 import { useSelector } from "react-redux";
-import CreateMailPanel from "../../components/create-mail-panel";
+import { ErrorMessage } from "../../components/error-message";
+import { useForm, Controller } from "react-hook-form";
+import { useState, useRef } from "react";
+import { useMethod } from "../../hooks/useMethod";
+import InputBasic from "../../components/input";
 
 const CreateMails = () => {
   const state = useSelector((state) => state);
-
-  const [loading, setLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [mailsInfo, setMailsInfo] = useState({
-    to: "",
-    subject: "",
-    content: "",
-  });
-
   const { createMails } = useMethod();
   const { email, token, name, id } = state.currentSlice.currentData;
+  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    mode: `onChange`,
+    reValidateMode: `onBlur`,
+    defaultValues: {
+      from: email,
+      name: name,
+      email: email,
+      token: token,
+      authorId: id,
+      to: "",
+      subject: "",
+      content: "",
+    },
+  });
 
-  const info = {
-    from: email,
-    name: name,
-    email: email,
-    token: token,
-    authorId: id,
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
-  const changeHandlerMailsInfo = (e) => {
-    setMailsInfo({ ...mailsInfo, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    setLoading(true);
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const response = await createMails(mailsInfo, info, selectedFile);
-
-      if (response) {
-        setMailsInfo({
-          to: "",
-          subject: "",
-          content: "",
-        });
-      }
-
+      setLoading(true);
+      await createMails(data, file);
       setLoading(false);
+      reset();
+      setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="mail-container">
-      <CreateMailPanel
-        subject={mailsInfo.subject}
-        to={mailsInfo.to}
-        content={mailsInfo.content}
-        changeHandlerMailsInfo={changeHandlerMailsInfo}
-        loading={loading}
-        handleSubmit={handleSubmit}
-        setSelectedFile={setSelectedFile}
-      />
-    </div>
+    <form className="mail-container" onSubmit={handleSubmit(onSubmit)}>
+      <Card className="card-mails">
+        <CardHeader className="flex flex-col gap-3">
+          <InputBasic
+            control={control}
+            label="Тема письма"
+            name="subject"
+            type="text"
+          />
+          <InputBasic
+            control={control}
+            label="Получатель"
+            name="to"
+            type="email"
+          />
+        </CardHeader>
+        <CardBody className="flex flex-col gap-3 min-h-56">
+          <Divider />
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                variant="bordered"
+                color="success"
+                classNames={{
+                  input: "resize-y min-h-[400px] textarea",
+                }}
+              />
+            )}
+          />
+          <input
+            type="file"
+            name="file"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+          />
+          <ErrorMessage error={state.error.value} />
+        </CardBody>
+        <CardFooter className="flex justify-end">
+          <Button color="primary" isLoading={loading} type="submit">
+            Send
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
   );
 };
 

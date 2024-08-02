@@ -1,24 +1,22 @@
 import {
   Modal,
   ModalContent,
-  Input,
   ModalBody,
   ModalFooter,
   Button,
   ModalHeader,
 } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
-import { useMethod } from "../../hooks/useMethod";
-import InputEmail from "../input-email";
+import InputBasic from "../input";
 import InputPassword from "../input-password";
 
 const ModalEditProfile = ({
   isOpen,
   onClose,
-  backdrop,
   email,
   name,
   token,
+  onSubmit,
 }) => {
   const {
     control,
@@ -26,7 +24,7 @@ const ModalEditProfile = ({
     formState: { errors },
   } = useForm({
     mode: `onChange`,
-    // reValidateMode: `onBlur`,
+    reValidateMode: `onBlur`,
     defaultValues: {
       email: email,
       password: "",
@@ -35,20 +33,8 @@ const ModalEditProfile = ({
     },
   });
 
-  const { updateUser } = useMethod();
-
-  const onSubmit = async (data) => {
-    try {
-      const response = await updateUser(data);
-
-      return response;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   return (
-    <Modal backdrop={backdrop} isOpen={isOpen} onClose={onClose}>
+    <Modal backdrop={`blur`} isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader>Edit profile</ModalHeader>
         <ModalBody>
@@ -56,38 +42,33 @@ const ModalEditProfile = ({
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
           >
-            <InputEmail
+            <InputBasic
               control={control}
+              placeholder="Введите новый email"
+              label="Email"
+              name="email"
+              type="email"
               defaultValue={email}
-              errorMessage={errors.email?.message}
-              isInvalid={errors.email}
             />
-
             <InputPassword
+              placeholder={`Введите новый пароль`}
               control={control}
-              isInvalid={errors.password}
-              errorMessage={errors.password?.message}
             />
 
-            <Input
+            <InputBasic
               control={control}
+              placeholder="Введите ваше имя"
+              label="Имя"
               name="name"
               type="text"
-              variant="bordered"
-              label="Имя"
-              placeholder="Введите ваше имя"
-              className="input-width"
               defaultValue={name}
             />
-
-            <Input
+            <InputBasic
               control={control}
+              placeholder="Введите токен от вашего email"
+              label="Email токен"
               name="token"
               type="text"
-              variant="bordered"
-              label="Email токен"
-              placeholder="Введите токен от вашего email"
-              className="input-width"
               defaultValue={token}
             />
 
