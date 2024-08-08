@@ -56,9 +56,8 @@ const User = () => {
     const response = await getUserById(id);
 
     const respData = {
-      ...response.data.user,
-      createdAt: formatDate(response.data.user.createdAt),
-      count: response.data.count,
+      ...response.data,
+      createdAt: formatDate(response.data.createdAt),
     };
 
     dispatch(userData(respData));

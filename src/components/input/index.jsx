@@ -51,7 +51,6 @@ const InputBasic = ({
     control,
     ...rules,
   });
-  console.log(field);
 
   return (
     <Input

@@ -12,23 +12,21 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaDownload } from "react-icons/fa";
 import { useCreateFile } from "./../../hooks/useCreateFile";
 import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
-import { BASE_URL } from "../../config";
+import { fetchMails } from "../../features/mails/mailsSlice";
 
-const MailsRender = ({
-  api,
-  get,
-  countMails,
-  mailsData,
-  mailsDataCurrent,
-  countMailsDispatch,
-}) => {
+const MailsRender = () => {
   const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  console.log(state.mails);
+
+  const { jwt, id } = state.auth;
+
+  // console.log(mailsData, mailsCount, status, error);
 
   const { createFile } = useCreateFile();
   const { formatDate } = useConvertDate();
@@ -36,7 +34,6 @@ const MailsRender = ({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const [contentMails, setContentMails] = useState({
     contentMails: "",
     subject: "",
@@ -45,11 +42,18 @@ const MailsRender = ({
     recipient: "",
   });
 
-  const pages = Math.ceil(countMails / 10);
+  // const pages = Math.ceil(mailsCount / 10);
+  useEffect(() => {
+    dispatch(fetchMails({ jwt, limit: 10, page: 1, id }));
+  }, []);
+  // const items = useMemo(() => {
+  //   return mailsData.map((mail) => ({
+  //     ...mail,
+  //     createdAt: formatDate(mail.createdAt),
+  //   }));
 
-  const items = useMemo(() => {
-    return mailsData;
-  }, [page, mailsData, countMails]);
+  //   return mailsData;
+  // }, [mailsData, formatDate]);
 
   const contentValues = (contentData) => {
     setContentMails({
@@ -62,27 +66,9 @@ const MailsRender = ({
     });
   };
 
-  const getMails = async () => {
-    try {
-      setLoading(true);
-      const response = await get(api, 10, page);
-
-      const respData = response.data.mails.map((mail) => ({
-        ...mail,
-        createdAt: formatDate(mail.createdAt),
-      }));
-
-      dispatch(mailsDataCurrent(respData));
-      dispatch(countMailsDispatch(response.data.limit));
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getMails();
-  }, [page]);
+  // useEffect(() => {
+  //   dispatch(fetchMails({ jwt, limit: 10, page, id }));
+  // }, [page]);
 
   let csvData = [["date", "from", "name", "to", "subject", "content"]];
 
@@ -104,27 +90,27 @@ const MailsRender = ({
     csvData = [["date", "from", "name", "to", "subject", "content"]];
   };
 
-  const downloadAllPages = async () => {
-    const response = await await get(api);
-
-    const respData = response.data.mails.map((mail) => ({
-      ...mail,
-      createdAt: formatDate(mail.createdAt),
-    }));
-
-    fileGenerate(respData);
-    return response;
-  };
+  // const downloadAllPages = () => {
+  //   dispatch(fetchMails({ api, jwt, limit: mailsCount, page, id })).then(
+  //     (result) => {
+  //       if (fetchMails.fulfilled.match(result)) {
+  //         fileGenerate(result.payload.mails);
+  //       } else {
+  //         console.error(result.payload);
+  //       }
+  //     }
+  //   );
+  // };
 
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>
-        <div className="p-1">Mails send: {countMails}</div>
+        <div className="p-1">Mails send: {12}</div>
         <div className="flex gap-2 items-center">
           <Button
             color="primary"
             endContent={<FaDownload />}
-            onClick={downloadAllPages}
+            // onClick={downloadAllPages}
           >
             Download all pages
           </Button>
@@ -132,13 +118,13 @@ const MailsRender = ({
           <Button
             color="warning"
             endContent={<FaDownload />}
-            onClick={() => fileGenerate(mailsData)}
+            // onClick={() => fileGenerate(mailsData)}
           >
             Download current page
           </Button>
         </div>
       </div>
-      <Table
+      {/* <Table
         aria-label="Example table with client side pagination"
         bottomContent={
           pages > 0 ? (
@@ -169,7 +155,7 @@ const MailsRender = ({
         <TableBody
           items={items}
           loadingContent={<Spinner label="Loading..." color="warning" />}
-          loadingState={loading ? "loading" : "idle"}
+          loadingState={status === "loading" ? "loading" : "idle"}
         >
           {(item) => (
             <TableRow key={item.id}>
@@ -191,7 +177,7 @@ const MailsRender = ({
             </TableRow>
           )}
         </TableBody>
-      </Table>
+      </Table> */}
 
       <ModalMailContent
         isOpen={isOpen}

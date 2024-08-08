@@ -41,6 +41,7 @@ const AllUsers = () => {
   const getUsers = async () => {
     setLoading(true);
     const response = await getPages(`/users`, 10, page);
+    console.log(response);
 
     const respData = response.data.users.map((user) => ({
       ...user,
@@ -48,7 +49,7 @@ const AllUsers = () => {
     }));
 
     dispatch(usersDataAll(respData));
-    dispatch(usersCountLimit(response.data.limit));
+    dispatch(usersCountLimit(response.data.countUsers));
     setLoading(false);
   };
 
