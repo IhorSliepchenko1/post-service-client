@@ -4,9 +4,9 @@ import { BASE_URL } from "../../config";
 
 export const fetchMails = createAsyncThunk(
   "mails/fetchMails",
-  async ({ jwt, limit, page, id }, { rejectWithValue }) => {
+  async ({ jwt, limit, page, id, api }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/mails`, {
+      const response = await axios.get(`${BASE_URL}/api/${api}`, {
         headers: {
           "Content-Type": "application/json",
           authorization: jwt,
@@ -31,6 +31,7 @@ const mailSlice = createSlice({
   name: "mails",
   initialState: {
     data: [],
+    dataAll: [],
     count: 0,
     status: "idle",
     error: null,
@@ -53,5 +54,7 @@ const mailSlice = createSlice({
       });
   },
 });
+
+export const { mailSliceAll } = mailSlice.actions;
 
 export default mailSlice.reducer;

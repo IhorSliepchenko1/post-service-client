@@ -19,14 +19,12 @@ import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
 import { fetchMails } from "../../features/mails/mailsSlice";
 
-const MailsRender = () => {
+const MailsRender = ({ api }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  console.log(state.mails);
+  const { data, count, status } = state.mails;
 
   const { jwt, id } = state.auth;
-
-  // console.log(mailsData, mailsCount, status, error);
 
   const { createFile } = useCreateFile();
   const { formatDate } = useConvertDate();
@@ -42,18 +40,14 @@ const MailsRender = () => {
     recipient: "",
   });
 
-  // const pages = Math.ceil(mailsCount / 10);
-  useEffect(() => {
-    dispatch(fetchMails({ jwt, limit: 10, page: 1, id }));
-  }, []);
-  // const items = useMemo(() => {
-  //   return mailsData.map((mail) => ({
-  //     ...mail,
-  //     createdAt: formatDate(mail.createdAt),
-  //   }));
+  const pages = Math.ceil(count / 10);
 
-  //   return mailsData;
-  // }, [mailsData, formatDate]);
+  const items = useMemo(() => {
+    return data.map((mail) => ({
+      ...mail,
+      createdAt: formatDate(mail.createdAt),
+    }));
+  }, [data]);
 
   const contentValues = (contentData) => {
     setContentMails({
@@ -66,15 +60,11 @@ const MailsRender = () => {
     });
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchMails({ jwt, limit: 10, page, id }));
-  // }, [page]);
-
   let csvData = [["date", "from", "name", "to", "subject", "content"]];
 
   const fileGenerate = (array) => {
-    array.forEach((item) => {
-      let content = item.content.split(`\n`).filter((el) => el !== "");
+    array.map((item) => {
+      let content = item.content.replace(/[\r\n]+/g, "");
 
       csvData.push([
         item.createdAt,
@@ -82,7 +72,7 @@ const MailsRender = () => {
         item.name,
         item.to,
         item.subject,
-        ...content,
+        content,
       ]);
     });
 
@@ -90,17 +80,22 @@ const MailsRender = () => {
     csvData = [["date", "from", "name", "to", "subject", "content"]];
   };
 
-  // const downloadAllPages = () => {
-  //   dispatch(fetchMails({ api, jwt, limit: mailsCount, page, id })).then(
-  //     (result) => {
-  //       if (fetchMails.fulfilled.match(result)) {
-  //         fileGenerate(result.payload.mails);
-  //       } else {
-  //         console.error(result.payload);
-  //       }
-  //     }
-  //   );
-  // };
+  useEffect(() => {
+    dispatch(fetchMails({ jwt, limit: 10, page, id, api }));
+  }, [page]);
+
+  const downloadAllPages = () => {
+    dispatch(fetchMails({ jwt, limit: "", page: 1, id, api })).then((res) => {
+      const respData = res.payload.mails.map((mail) => ({
+        ...mail,
+        createdAt: formatDate(mail.createdAt),
+      }));
+
+      fileGenerate(respData);
+
+      dispatch(fetchMails({ jwt, limit: 10, page, id, api }));
+    });
+  };
 
   return (
     <div className="flex flex-col justify-center container-table gap-2">
@@ -110,7 +105,7 @@ const MailsRender = () => {
           <Button
             color="primary"
             endContent={<FaDownload />}
-            // onClick={downloadAllPages}
+            onClick={downloadAllPages}
           >
             Download all pages
           </Button>
@@ -118,13 +113,13 @@ const MailsRender = () => {
           <Button
             color="warning"
             endContent={<FaDownload />}
-            // onClick={() => fileGenerate(mailsData)}
+            onClick={() => fileGenerate(data)}
           >
             Download current page
           </Button>
         </div>
       </div>
-      {/* <Table
+      <Table
         aria-label="Example table with client side pagination"
         bottomContent={
           pages > 0 ? (
@@ -177,7 +172,7 @@ const MailsRender = () => {
             </TableRow>
           )}
         </TableBody>
-      </Table> */}
+      </Table>
 
       <ModalMailContent
         isOpen={isOpen}

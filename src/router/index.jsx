@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "../components/layout";
 import Auth from "./../pages/auth/index";
-// import MyMails from "../pages/my-mails";
+import MyMails from "../pages/my-mails";
 import CreateMails from "../pages/create-mail";
 import AllMails from "../pages/all-mails";
 import AllUsers from "../pages/all-users/index";
@@ -19,8 +19,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        // element: <MyMails />,
-        element: <AllMails />,
+        element: <MyMails />,
       },
       {
         path: "/create-mails",
