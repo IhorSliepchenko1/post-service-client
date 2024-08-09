@@ -31,7 +31,6 @@ const mailSlice = createSlice({
   name: "mails",
   initialState: {
     data: [],
-    dataAll: [],
     count: 0,
     status: "idle",
     error: null,
@@ -54,7 +53,5 @@ const mailSlice = createSlice({
       });
   },
 });
-
-export const { mailSliceAll } = mailSlice.actions;
 
 export default mailSlice.reducer;

@@ -18,20 +18,19 @@ import { useCreateFile } from "./../../hooks/useCreateFile";
 import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
 import { fetchMails } from "../../features/mails/mailsSlice";
+import { useDownloadAllPages } from "../../hooks/useDownloadAllPages";
 
 const MailsRender = ({ api }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { data, count, status } = state.mails;
-
   const { jwt, id } = state.auth;
-
   const { createFile } = useCreateFile();
   const { formatDate } = useConvertDate();
-
+  const { downloadAllPages } = useDownloadAllPages();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   const [page, setPage] = useState(1);
+
   const [contentMails, setContentMails] = useState({
     contentMails: "",
     subject: "",
@@ -84,19 +83,6 @@ const MailsRender = ({ api }) => {
     dispatch(fetchMails({ jwt, limit: 10, page, id, api }));
   }, [page]);
 
-  const downloadAllPages = () => {
-    dispatch(fetchMails({ jwt, limit: "", page: 1, id, api })).then((res) => {
-      const respData = res.payload.mails.map((mail) => ({
-        ...mail,
-        createdAt: formatDate(mail.createdAt),
-      }));
-
-      fileGenerate(respData);
-
-      dispatch(fetchMails({ jwt, limit: 10, page, id, api }));
-    });
-  };
-
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>
@@ -105,7 +91,9 @@ const MailsRender = ({ api }) => {
           <Button
             color="primary"
             endContent={<FaDownload />}
-            onClick={downloadAllPages}
+            onClick={() =>
+              downloadAllPages(api, jwt, id, formatDate, fileGenerate)
+            }
           >
             Download all pages
           </Button>
