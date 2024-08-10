@@ -1,21 +1,12 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { errorMessage } from "./features/error/errorSlice";
+import { useTheme } from "./context";
 
 const App = () => {
-  const state = useSelector((state) => state);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(errorMessage(""));
-    }, 3500);
-  }, [state]);
+  const { theme } = useTheme();
 
   return (
-    <main className={`${state.theme.color} text-foreground bg-background`}>
+    <main className={`${theme} text-foreground bg-background`}>
       <RouterProvider router={router} />
     </main>
   );

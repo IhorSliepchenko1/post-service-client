@@ -24,12 +24,17 @@ const MailsRender = ({ api }) => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
   const { data, count, status } = state.mails;
-  const { jwt, id } = state.auth;
   const { createFile } = useCreateFile();
   const { formatDate } = useConvertDate();
   const { downloadAllPages } = useDownloadAllPages();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [page, setPage] = useState(1);
+
+  const { token, userId } = useSelector((state) => state.auth.userData);
+
+  useEffect(() => {
+    dispatch(fetchMails({ jwt: token, limit: 10, page, id: userId, api }));
+  }, [page]);
 
   const [contentMails, setContentMails] = useState({
     contentMails: "",
@@ -79,10 +84,6 @@ const MailsRender = ({ api }) => {
     csvData = [["date", "from", "name", "to", "subject", "content"]];
   };
 
-  useEffect(() => {
-    dispatch(fetchMails({ jwt, limit: 10, page, id, api }));
-  }, [page]);
-
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>
@@ -92,7 +93,7 @@ const MailsRender = ({ api }) => {
             color="primary"
             endContent={<FaDownload />}
             onClick={() =>
-              downloadAllPages(api, jwt, id, formatDate, fileGenerate)
+              downloadAllPages(api, token, userId, formatDate, fileGenerate)
             }
           >
             Download all pages

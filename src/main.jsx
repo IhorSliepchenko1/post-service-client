@@ -5,11 +5,14 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import App from "./App.jsx";
 import "./index.scss";
+import { ThemeProvider } from "./context/index.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <NextUIProvider>
-      <App />
-    </NextUIProvider>
+    <ThemeProvider>
+      <NextUIProvider>
+        <App />
+      </NextUIProvider>
+    </ThemeProvider>
   </Provider>
 );

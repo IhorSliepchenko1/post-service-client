@@ -1,55 +1,51 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useMethod } from "../../hooks/useMethod";
-import { useEffect, useState } from "react";
-import { currentUserData } from "../../features/current/currentSlice";
+import { useEffect } from "react";
 import { Card, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/react";
 import { Button, useDisclosure } from "@nextui-org/react";
 import ModalEditProfile from "../modal-edit-profile";
 import { MdOutlineEdit } from "react-icons/md";
+import { fetchCurrent } from "../../features/current/currentSlice";
+import { fetchUpdate } from "../../features/update-user/updateUserSlice";
 
 const UserInfo = () => {
-  const { getCurrentInfo, updateCurrentUser } = useMethod();
-
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { email, name, token } = state.currentSlice.currentData;
-
-  const [loading, setLoading] = useState(true);
+  const { userData, status } = state.currentSlice;
+  const { token, userId } = state.auth.userData;
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const currentInfo = () => {
+    dispatch(fetchCurrent({ jwt: token, id: userId }));
+  };
 
   const onSubmit = async (data) => {
     try {
-      await updateCurrentUser(data);
+      dispatch(fetchUpdate({ data, jwt: token, id: userId }));
+
+      setTimeout(() => {
+        currentInfo();
+      }, 500);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const currentUser = async () => {
-    setLoading(true);
-
-    const response = await getCurrentInfo(`current`);
-    dispatch(currentUserData(response.data));
-
-    setLoading(false);
-  };
-
   useEffect(() => {
-    currentUser();
-  }, [onClose]);
+    currentInfo();
+  }, []);
 
   return (
     <>
       <Card className="user-card flex justify-center">
-        {loading ? (
+        {status === `loading` ? (
           <Spinner label="Loading..." color="warning" />
         ) : (
           <CardBody>
             <h4 className="acc-info">Account info:</h4>
             <div className="flex justify-between gap-3">
               <p>Your email: </p>
-              <span>{state.currentSlice.currentData.email}</span>
+              <span>{userData.email}</span>
             </div>
             <Divider />
             <div className="flex justify-between">
@@ -57,24 +53,20 @@ const UserInfo = () => {
 
               <span
                 style={{
-                  color: state.currentSlice.currentData.admin ? `green` : `red`,
+                  color: userData.admin ? `green` : `red`,
                 }}
-              >{`${
-                state.currentSlice.currentData.admin ? `admin` : `user`
-              }`}</span>
+              >{`${userData.admin ? `admin` : `user`}`}</span>
             </div>
             <Divider />
             <div className="flex justify-between">
               <p>Your name:</p>
-              <span>{state.currentSlice.currentData.name || `-`}</span>
+              <span>{userData.name || `-`}</span>
             </div>
             <Divider />
-            {state.currentSlice.currentData.token && (
+            {userData.token && (
               <div className="flex justify-between">
                 <p> Email token:</p>
-                <span style={{ color: `green` }}>
-                  {state.currentSlice.currentData?.token}
-                </span>
+                <span style={{ color: `green` }}>{userData?.token}</span>
               </div>
             )}
             <Divider />
@@ -97,9 +89,9 @@ const UserInfo = () => {
             onSubmit={onSubmit}
             isOpen={isOpen}
             onClose={onClose}
-            email={email}
-            name={name}
-            token={token}
+            email={userData.email}
+            name={userData.name}
+            token={userData.token}
           />
         </CardFooter>
       </Card>

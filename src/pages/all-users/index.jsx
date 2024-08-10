@@ -1,10 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { useMethod } from "../../hooks/useMethod";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  usersCountLimit,
-  usersDataAll,
-} from "../../features/all-users/allUsersSlice";
+import { fetchUsers } from "../../features/all-users/allUsersSlice";
 import {
   Table,
   TableHeader,
@@ -22,39 +18,24 @@ import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AllUsers = () => {
-  const { getPages } = useMethod();
   const { formatDate } = useConvertDate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-
+  const { data, count, status } = state.users;
+  const { token, userId } = state.auth.userData;
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-
   const navigate = useNavigate();
-
-  const pages = Math.ceil(state.usersAll.usersCount / 10);
+  const pages = Math.ceil(count / 10);
 
   const items = useMemo(() => {
-    return state.usersAll.usersDataAll;
-  }, [page, state]);
-
-  const getUsers = async () => {
-    setLoading(true);
-    const response = await getPages(`/users`, 10, page);
-    console.log(response);
-
-    const respData = response.data.users.map((user) => ({
+    return data.map((user) => ({
       ...user,
       createdAt: formatDate(user.createdAt),
     }));
-
-    dispatch(usersDataAll(respData));
-    dispatch(usersCountLimit(response.data.countUsers));
-    setLoading(false);
-  };
+  }, [page, state]);
 
   useEffect(() => {
-    getUsers();
+    dispatch(fetchUsers({ jwt: token, limit: 10, page, id: userId }));
   }, [page]);
 
   return (
@@ -90,7 +71,7 @@ const AllUsers = () => {
       <TableBody
         items={items}
         loadingContent={<Spinner color="warning" />}
-        loadingState={loading ? "loading" : "idle"}
+        loadingState={status === "loading" ? "loading" : "idle"}
       >
         {(item) => (
           <TableRow key={item.id}>
@@ -110,7 +91,7 @@ const AllUsers = () => {
                       variant="flat"
                     >
                       {item.admin ? "admin" : "user"}
-                    </Chip>{" "}
+                    </Chip>
                   </div>
                 ) : (
                   getKeyValue(item, columnKey)

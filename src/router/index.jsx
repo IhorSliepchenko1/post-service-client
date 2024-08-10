@@ -4,8 +4,8 @@ import Auth from "./../pages/auth/index";
 import MyMails from "../pages/my-mails";
 import CreateMails from "../pages/create-mail";
 import AllMails from "../pages/all-mails";
-import AllUsers from "../pages/all-users/index";
 import User from "./../pages/user/index";
+import AllUsers from "../pages/all-users";
 
 export const router = createBrowserRouter([
   {

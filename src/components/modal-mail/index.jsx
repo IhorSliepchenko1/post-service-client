@@ -7,7 +7,7 @@ import {
   ModalFooter,
   Divider,
 } from "@nextui-org/react";
-import { useMethod } from "../../hooks/useMethod";
+import { useDownloadFile } from "../../hooks/useDownloadFile";
 
 const ModalMailContent = ({
   isOpen,
@@ -19,7 +19,7 @@ const ModalMailContent = ({
   recipient,
   file,
 }) => {
-  const { downloadFile } = useMethod();
+  const { downloadFile } = useDownloadFile();
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

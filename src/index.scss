@@ -24,7 +24,7 @@ header {
   min-width: 100%;
 }
 
-.theme-icon {
+.theme-icon-nav {
   cursor: pointer;
 }
 
@@ -105,4 +105,11 @@ header {
 .your {
   color: green;
   font-size: 20px;
+}
+
+.theme-icon {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  right: 10px;
 }

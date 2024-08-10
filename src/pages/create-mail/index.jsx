@@ -8,20 +8,23 @@ import {
   Textarea,
   Button,
 } from "@nextui-org/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../../components/error-message";
 import { useForm, Controller } from "react-hook-form";
 import { useState, useRef } from "react";
-import { useMethod } from "../../hooks/useMethod";
 import InputBasic from "../../components/input";
+import { fetchCreateMail } from "../../features/create-mail/createMailSlice";
 
 const CreateMails = () => {
   const state = useSelector((state) => state);
-  const { createMails } = useMethod();
-  const { email, token, name, id } = state.currentSlice.currentData;
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const jwt = state.auth.userData.token;
+  const { status, error } = state.createMail;
+  const { email, name, token, id } = state.currentSlice.userData;
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
+
   const {
     control,
     handleSubmit,
@@ -29,13 +32,10 @@ const CreateMails = () => {
     reset,
   } = useForm({
     mode: `onChange`,
+
     reValidateMode: `onBlur`,
+
     defaultValues: {
-      from: email,
-      name: name,
-      email: email,
-      token: token,
-      authorId: id,
       to: "",
       subject: "",
       content: "",
@@ -46,11 +46,22 @@ const CreateMails = () => {
     setFile(e.target.files[0]);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     try {
-      setLoading(true);
-      await createMails(data, file);
-      setLoading(false);
+      const formData = new FormData();
+      formData.append("from", email);
+      formData.append("name", name);
+      formData.append("token", token);
+      formData.append("authorId", id);
+      formData.append("to", data.to);
+      formData.append("subject", data.subject);
+      formData.append("content", data.content);
+      if (file) {
+        formData.append("file", file);
+      }
+
+      dispatch(fetchCreateMail({ formData, jwt }));
+
       reset();
       setFile(null);
       if (fileInputRef.current) {
@@ -100,10 +111,14 @@ const CreateMails = () => {
             onChange={handleFileChange}
             ref={fileInputRef}
           />
-          <ErrorMessage error={state.error.value} />
+          <ErrorMessage error={error} />
         </CardBody>
         <CardFooter className="flex justify-end">
-          <Button color="primary" isLoading={loading} type="submit">
+          <Button
+            color="primary"
+            isLoading={status === `loading` ? true : false}
+            type="submit"
+          >
             Send
           </Button>
         </CardFooter>

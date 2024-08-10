@@ -5,34 +5,18 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
-
+import { useDispatch, useSelector } from "react-redux";
 import { CiDark } from "react-icons/ci";
 import { CiLight } from "react-icons/ci";
-import { useEffect, useState } from "react";
-import { colorTheme } from "../../features/theme/themeSlice";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context";
+import { logout } from "../../features/auth/authSlice";
 
 const NavBar = () => {
-  const admin = useSelector((state) => state.currentSlice.currentData.admin);
   const dispatch = useDispatch();
-
-  const [select, setSelect] = useState(
-    JSON.parse(localStorage.getItem(`themeStatus`))
-  );
-
-  const toggleTheme = () => {
-    setSelect((prev) => !prev);
-  };
-
-  useEffect(() => {
-    localStorage.setItem(`themeStatus`, JSON.stringify(select));
-
-    dispatch(colorTheme(select ? `light` : `dark`));
-  }, [toggleTheme, select]);
-
+  const { admin } = useSelector((state) => state.currentSlice.userData);
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <Navbar>
@@ -80,8 +64,8 @@ const NavBar = () => {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <div className="theme-icon" onClick={toggleTheme}>
-            {select ? <CiLight /> : <CiDark />}
+          <div className="theme-icon-nav" onClick={toggleTheme}>
+            {theme === "light" ? <CiLight /> : <CiDark />}
           </div>
         </NavbarItem>
         <NavbarItem>

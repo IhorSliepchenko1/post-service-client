@@ -1,11 +1,12 @@
 import { Input } from "@nextui-org/react";
 import { useForm } from "react-hook-form";
 import { Button, Link } from "@nextui-org/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ErrorMessage } from "../error-message";
-import { useMethod } from "../../hooks/useMethod";
+import { fetchAuth, logout } from "../../features/auth/authSlice";
 import InputBasic from "../input";
 import InputPassword from "../input-password";
+import { useEffect } from "react";
 
 const Registration = ({ setSelected }) => {
   const {
@@ -24,16 +25,13 @@ const Registration = ({ setSelected }) => {
     },
   });
 
-  const { userAuth } = useMethod();
-  const state = useSelector((state) => state);
+  const { error, status } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     try {
-      const response = await userAuth("register", data);
-
-      if (response.statusText === `OK`) {
-        setSelected("login");
-      }
+      dispatch(fetchAuth({ data, api: `register` }));
+      setSelected("login");
     } catch (err) {
       console.error(err);
     }
@@ -80,7 +78,7 @@ const Registration = ({ setSelected }) => {
           className="input-width"
         />
 
-        <ErrorMessage error={state.error.value} />
+        <ErrorMessage error={error} />
 
         <p className="text-center text-small">
           Уже зарегистрированы?

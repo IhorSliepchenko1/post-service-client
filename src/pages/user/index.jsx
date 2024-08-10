@@ -18,7 +18,7 @@ import { MdOutlineEdit, MdDelete } from "react-icons/md";
 import { Spinner } from "@nextui-org/react";
 import ModalDeleteProfile from "../../components/modal-delete";
 import ModalEditProfile from "../../components/modal-edit-profile";
-import { logout } from "../../features/auth/authSlice";
+// import { logout } from "../../features/auth/authSlice";
 
 const User = () => {
   const { id } = useParams();
@@ -32,8 +32,8 @@ const User = () => {
   const { formatDate } = useConvertDate();
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  const { user } = state.user;
-  const currentId = state.auth.id;
+  // const { user } = state.user;
+  // const currentId = state.auth.id;
   const [loading, setLoading] = useState(true);
   const [userDelete, setUserDelete] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -72,42 +72,42 @@ const User = () => {
     navigate(-1);
   };
 
-  const deeteMailsAndUser = async () => {
-    setUserDelete(null);
-    try {
-      await deleteAllMailsByUserId(id);
-      const delUser = await deleteUserById(id);
+  // const deeteMailsAndUser = async () => {
+  //   setUserDelete(null);
+  //   try {
+  //     await deleteAllMailsByUserId(id);
+  //     const delUser = await deleteUserById(id);
 
-      setUserDelete(delUser.data.message);
+  //     setUserDelete(delUser.data.message);
 
-      setTimeout(() => {
-        backAndClearState();
-      }, 1500);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     setTimeout(() => {
+  //       backAndClearState();
+  //     }, 1500);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  const onSubmit = async (data) => {
-    try {
-      const updatedUser = await updateUserById(id, data);
+  // const onSubmit = async (data) => {
+  //   try {
+  //     const updatedUser = await updateUserById(id, data);
 
-      const respData = {
-        ...updatedUser.data,
-        createdAt: formatDate(updatedUser.data.createdAt),
-      };
+  //     const respData = {
+  //       ...updatedUser.data,
+  //       createdAt: formatDate(updatedUser.data.createdAt),
+  //     };
 
-      dispatch(userData(respData));
+  //     dispatch(userData(respData));
 
-      return updatedUser;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //     return updatedUser;
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    getUserInfo(id);
-  }, []);
+  // useEffect(() => {
+  //   getUserInfo(id);
+  // }, []);
 
   return (
     <div className="user-container">
@@ -127,7 +127,7 @@ const User = () => {
             <Spinner color="warning" />
           ) : (
             <>
-              <CardBody className="p-3 flex flex-col gap-4">
+              {/* <CardBody className="p-3 flex flex-col gap-4">
                 <div className="flex justify-between">
                   <span>CREATED ACCOUNT:</span>
                   <span>{user.createdAt}</span>
@@ -159,10 +159,10 @@ const User = () => {
                     {user.count}
                   </span>
                 </div>
-              </CardBody>
+              </CardBody> */}
               <Divider />
 
-              {user.admin ? (
+              {/* {user.admin ? (
                 <div
                   className={`p-3 text-center ${
                     currentId === id ? `your` : `warning`
@@ -173,7 +173,7 @@ const User = () => {
                       color="danger"
                       onPress={() => {
                         handleOpenDel();
-                        dispatch(logout());
+                        // dispatch(logout());
                       }}
                     >
                       Delete My Account <MdDelete />
@@ -193,13 +193,13 @@ const User = () => {
                     Delete <MdDelete />
                   </Button>
                 </CardFooter>
-              )}
+              )} */}
             </>
           )}
         </Card>
       )}
 
-      {modal === 1 ? (
+      {/* {modal === 1 ? (
         <ModalDeleteProfile
           isOpen={isOpen}
           handleDelete={deeteMailsAndUser}
@@ -214,7 +214,7 @@ const User = () => {
           name={user.name}
           token={user.token}
         />
-      )}
+      )} */}
     </div>
   );
 };
