@@ -7,7 +7,8 @@ import {
   ModalFooter,
   Divider,
 } from "@nextui-org/react";
-import { useDownloadFile } from "../../hooks/useDownloadFile";
+import { useDispatch } from "react-redux";
+import { fetchDownloadMailFile } from "../../features/download-file-mail/downloadMailFileSlice";
 
 const ModalMailContent = ({
   isOpen,
@@ -19,7 +20,11 @@ const ModalMailContent = ({
   recipient,
   file,
 }) => {
-  const { downloadFile } = useDownloadFile();
+  const dispatch = useDispatch();
+
+  const downloadFile = (file) => {
+    dispatch(fetchDownloadMailFile(file));
+  };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

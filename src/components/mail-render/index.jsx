@@ -18,7 +18,7 @@ import { useCreateFile } from "./../../hooks/useCreateFile";
 import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
 import { fetchMails } from "../../features/mails/mailsSlice";
-import { useDownloadAllPages } from "../../hooks/useDownloadAllPages";
+import { fetchDownloadFile } from "../../features/download-file-page/downloadFileSlice";
 
 const MailsRender = ({ api }) => {
   const dispatch = useDispatch();
@@ -26,7 +26,6 @@ const MailsRender = ({ api }) => {
   const { data, count, status } = state.mails;
   const { createFile } = useCreateFile();
   const { formatDate } = useConvertDate();
-  const { downloadAllPages } = useDownloadAllPages();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [page, setPage] = useState(1);
 
@@ -93,7 +92,15 @@ const MailsRender = ({ api }) => {
             color="primary"
             endContent={<FaDownload />}
             onClick={() =>
-              downloadAllPages(api, token, userId, formatDate, fileGenerate)
+              dispatch(
+                fetchDownloadFile({
+                  api,
+                  jwt: token,
+                  id: userId,
+                  formatDate,
+                  fileGenerate,
+                })
+              )
             }
           >
             Download all pages

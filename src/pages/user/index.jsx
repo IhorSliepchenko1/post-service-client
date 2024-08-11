@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useMethod } from "../../hooks/useMethod";
 import { useEffect, useState } from "react";
 import {
   Button,
@@ -11,32 +10,33 @@ import {
 } from "@nextui-org/react";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useConvertDate } from "./../../hooks/useConverDate";
+// import { useConvertDate } from "./../../hooks/useConverDate";
 import { useDispatch, useSelector } from "react-redux";
-import { userData } from "../../features/user/userSlice";
+import { fetchUser } from "../../features/user/userSlice";
 import { MdOutlineEdit, MdDelete } from "react-icons/md";
 import { Spinner } from "@nextui-org/react";
 import ModalDeleteProfile from "../../components/modal-delete";
 import ModalEditProfile from "../../components/modal-edit-profile";
-// import { logout } from "../../features/auth/authSlice";
+import { logout } from "../../features/auth/authSlice";
+import { fetchUpdate } from "../../features/update-user/updateUserSlice";
+import {
+  clearState,
+  fetchDelete,
+} from "../../features/deleteUser/deleteUserSlice";
+// const { formatDate } = useConvertDate();
 
 const User = () => {
   const { id } = useParams();
-  const {
-    getUserById,
-    deleteAllMailsByUserId,
-    deleteUserById,
-    updateUserById,
-  } = useMethod();
   const navigate = useNavigate();
-  const { formatDate } = useConvertDate();
+
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
-  // const { user } = state.user;
-  // const currentId = state.auth.id;
-  const [loading, setLoading] = useState(true);
-  const [userDelete, setUserDelete] = useState(null);
+  const { token } = state.auth.userData;
+  const { user, status } = state.user;
+  const { message } = state.deleteUser;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [modal, setModal] = useState(0);
 
   const handleOpenDel = () => {
@@ -51,63 +51,38 @@ const User = () => {
     onOpen();
   };
 
-  const getUserInfo = async (id) => {
-    setLoading(true);
-    const response = await getUserById(id);
-
-    const respData = {
-      ...response.data,
-      createdAt: formatDate(response.data.createdAt),
-    };
-
-    dispatch(userData(respData));
-
-    setLoading(false);
-
-    return respData;
+  const getUserInfo = (id) => {
+    dispatch(fetchUser({ jwt: token, id }));
   };
 
   const backAndClearState = () => {
-    dispatch(userData({}));
     navigate(-1);
   };
 
-  // const deeteMailsAndUser = async () => {
-  //   setUserDelete(null);
-  //   try {
-  //     await deleteAllMailsByUserId(id);
-  //     const delUser = await deleteUserById(id);
+  const deeteMailsAndUser = async () => {
+    dispatch(fetchDelete({ jwt: token, id }));
 
-  //     setUserDelete(delUser.data.message);
+    setTimeout(() => {
+      backAndClearState();
+      dispatch(clearState());
+    }, 1000);
+  };
 
-  //     setTimeout(() => {
-  //       backAndClearState();
-  //     }, 1500);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const onSubmit = async (data) => {
+    try {
+      dispatch(fetchUpdate({ data, jwt: token, id }));
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     const updatedUser = await updateUserById(id, data);
+      setTimeout(() => {
+        getUserInfo(id);
+      }, 500);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //     const respData = {
-  //       ...updatedUser.data,
-  //       createdAt: formatDate(updatedUser.data.createdAt),
-  //     };
-
-  //     dispatch(userData(respData));
-
-  //     return updatedUser;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getUserInfo(id);
-  // }, []);
+  useEffect(() => {
+    getUserInfo(id);
+  }, []);
 
   return (
     <div className="user-container">
@@ -119,15 +94,15 @@ const User = () => {
       >
         go back
       </Button>
-      {userDelete ? (
-        <p className="text-center">{userDelete}</p>
+      {message ? (
+        <p className="text-center">{message}</p>
       ) : (
         <Card className="card-user">
-          {loading ? (
+          {status === `loading` ? (
             <Spinner color="warning" />
           ) : (
             <>
-              {/* <CardBody className="p-3 flex flex-col gap-4">
+              <CardBody className="p-3 flex flex-col gap-4">
                 <div className="flex justify-between">
                   <span>CREATED ACCOUNT:</span>
                   <span>{user.createdAt}</span>
@@ -159,10 +134,10 @@ const User = () => {
                     {user.count}
                   </span>
                 </div>
-              </CardBody> */}
+              </CardBody>
               <Divider />
 
-              {/* {user.admin ? (
+              {user.admin ? (
                 <div
                   className={`p-3 text-center ${
                     currentId === id ? `your` : `warning`
@@ -173,7 +148,7 @@ const User = () => {
                       color="danger"
                       onPress={() => {
                         handleOpenDel();
-                        // dispatch(logout());
+                        dispatch(logout());
                       }}
                     >
                       Delete My Account <MdDelete />
@@ -193,13 +168,13 @@ const User = () => {
                     Delete <MdDelete />
                   </Button>
                 </CardFooter>
-              )} */}
+              )}
             </>
           )}
         </Card>
       )}
 
-      {/* {modal === 1 ? (
+      {modal === 1 ? (
         <ModalDeleteProfile
           isOpen={isOpen}
           handleDelete={deeteMailsAndUser}
@@ -214,7 +189,7 @@ const User = () => {
           name={user.name}
           token={user.token}
         />
-      )} */}
+      )}
     </div>
   );
 };
