@@ -7,6 +7,8 @@ import ModalEditProfile from "../modal-edit-profile";
 import { MdOutlineEdit } from "react-icons/md";
 import { fetchCurrent } from "../../features/current/currentSlice";
 import { fetchUpdate } from "../../features/update-user/updateUserSlice";
+import { useTheme } from "../../context";
+import { list } from "../../languages";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
@@ -14,6 +16,7 @@ const UserInfo = () => {
   const { userData, status } = state.currentSlice;
   const { token, userId } = state.auth.userData;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { language } = useTheme();
 
   const currentInfo = () => {
     dispatch(fetchCurrent({ jwt: token, id: userId }));
@@ -42,14 +45,14 @@ const UserInfo = () => {
           <Spinner label="Loading..." color="warning" />
         ) : (
           <CardBody>
-            <h4 className="acc-info">Account info:</h4>
+            <h4 className="acc-info"> {list[language].acc_info}:</h4>
             <div className="flex justify-between gap-3">
-              <p>Your email: </p>
+              <p>{list[language].email}: </p>
               <span>{userData.email}</span>
             </div>
             <Divider />
             <div className="flex justify-between">
-              <p>Status:</p>
+              <p>{list[language].status}:</p>
 
               <span
                 style={{
@@ -59,13 +62,13 @@ const UserInfo = () => {
             </div>
             <Divider />
             <div className="flex justify-between">
-              <p>Your name:</p>
+              <p>{list[language].name}:</p>
               <span>{userData.name || `-`}</span>
             </div>
             <Divider />
             {userData.token && (
               <div className="flex justify-between">
-                <p> Email token:</p>
+                <p>{list[language].email_token}:</p>
                 <span style={{ color: `green` }}>{userData?.token}</span>
               </div>
             )}
@@ -82,7 +85,7 @@ const UserInfo = () => {
               className="capitalize"
               endContent={<MdOutlineEdit />}
             >
-              Edit profile
+              {list[language].edit_profile}
             </Button>
           </div>
           <ModalEditProfile

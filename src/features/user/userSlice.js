@@ -34,7 +34,12 @@ export const userSlice = createSlice({
     error: null,
   },
 
-  reducers: {},
+  reducers: {
+    clearStateUser: (state) => {
+      state.user = {};
+      state.status = "idle";
+    },
+  },
   extraReducers: (builder) => {
     builder
 
@@ -54,5 +59,6 @@ export const userSlice = createSlice({
       });
   },
 });
+export const { clearStateUser } = userSlice.actions;
 
 export default userSlice.reducer;

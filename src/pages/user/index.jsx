@@ -10,9 +10,9 @@ import {
 } from "@nextui-org/react";
 import { IoArrowBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-// import { useConvertDate } from "./../../hooks/useConverDate";
+import { useConvertDate } from "./../../hooks/useConverDate";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../../features/user/userSlice";
+import { clearStateUser, fetchUser } from "../../features/user/userSlice";
 import { MdOutlineEdit, MdDelete } from "react-icons/md";
 import { Spinner } from "@nextui-org/react";
 import ModalDeleteProfile from "../../components/modal-delete";
@@ -23,7 +23,7 @@ import {
   clearState,
   fetchDelete,
 } from "../../features/deleteUser/deleteUserSlice";
-// const { formatDate } = useConvertDate();
+const { formatDate } = useConvertDate();
 
 const User = () => {
   const { id } = useParams();
@@ -33,6 +33,8 @@ const User = () => {
   const state = useSelector((state) => state);
   const { token } = state.auth.userData;
   const { user, status } = state.user;
+  const { userId } = state.auth.userData;
+
   const { message } = state.deleteUser;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,14 +59,15 @@ const User = () => {
 
   const backAndClearState = () => {
     navigate(-1);
+    dispatch(clearStateUser());
   };
 
   const deeteMailsAndUser = async () => {
     dispatch(fetchDelete({ jwt: token, id }));
 
     setTimeout(() => {
-      backAndClearState();
       dispatch(clearState());
+      backAndClearState();
     }, 1000);
   };
 
@@ -105,7 +108,7 @@ const User = () => {
               <CardBody className="p-3 flex flex-col gap-4">
                 <div className="flex justify-between">
                   <span>CREATED ACCOUNT:</span>
-                  <span>{user.createdAt}</span>
+                  <span>{formatDate(user.createdAt)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span> USER NAME:</span>
@@ -140,10 +143,10 @@ const User = () => {
               {user.admin ? (
                 <div
                   className={`p-3 text-center ${
-                    currentId === id ? `your` : `warning`
+                    userId === id ? `your` : `warning`
                   }`}
                 >
-                  {currentId === id ? (
+                  {userId === id ? (
                     <Button
                       color="danger"
                       onPress={() => {
