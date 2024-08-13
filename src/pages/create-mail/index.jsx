@@ -4,7 +4,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  Input,
   Textarea,
   Button,
 } from "@nextui-org/react";
@@ -14,6 +13,8 @@ import { useForm, Controller } from "react-hook-form";
 import { useState, useRef } from "react";
 import InputBasic from "../../components/input";
 import { fetchCreateMail } from "../../features/create-mail/createMailSlice";
+import { useTheme } from "../../context";
+import { list } from "../../languages";
 
 const CreateMails = () => {
   const state = useSelector((state) => state);
@@ -24,6 +25,7 @@ const CreateMails = () => {
   const { email, name, token, id } = state.currentSlice.userData;
   const [file, setFile] = useState(null);
   const fileInputRef = useRef(null);
+  const { language } = useTheme();
 
   const {
     control,
@@ -78,13 +80,13 @@ const CreateMails = () => {
         <CardHeader className="flex flex-col gap-3">
           <InputBasic
             control={control}
-            label="Тема письма"
+            label={list[language].theme}
             name="subject"
             type="text"
           />
           <InputBasic
             control={control}
-            label="Получатель"
+            label={list[language].recipient}
             name="to"
             type="email"
           />
@@ -119,7 +121,7 @@ const CreateMails = () => {
             isLoading={status === `loading` ? true : false}
             type="submit"
           >
-            Send
+            {list[language].send}
           </Button>
         </CardFooter>
       </Card>

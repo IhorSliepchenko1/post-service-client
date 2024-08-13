@@ -16,6 +16,8 @@ import {
 import { useConvertDate } from "../../hooks/useConverDate";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context";
+import { list } from "../../languages";
 
 const AllUsers = () => {
   const { formatDate } = useConvertDate();
@@ -26,6 +28,8 @@ const AllUsers = () => {
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   const pages = Math.ceil(count / 10);
+
+  const { language } = useTheme();
 
   const items = useMemo(() => {
     return data.map((user) => ({
@@ -63,10 +67,14 @@ const AllUsers = () => {
       }}
     >
       <TableHeader>
-        <TableColumn key="admin">STATUS</TableColumn>
-        <TableColumn key="createdAt">CREATED AT</TableColumn>
-        <TableColumn key="name">NAME</TableColumn>
-        <TableColumn key="email">MAIL</TableColumn>
+        <TableColumn key="admin">
+          {list[language].status.toUpperCase()}
+        </TableColumn>
+        <TableColumn key="createdAt">
+          {list[language].created_account}
+        </TableColumn>
+        <TableColumn key="name">{list[language].user_name}</TableColumn>
+        <TableColumn key="email">{list[language].mail_upper}</TableColumn>
       </TableHeader>
       <TableBody
         items={items}

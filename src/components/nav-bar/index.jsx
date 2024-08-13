@@ -80,7 +80,7 @@ const NavBar = () => {
         </NavbarItem>
         <NavbarItem>
           <Button color="danger" onClick={() => dispatch(logout())}>
-            Logout
+            {list[language].logout}
           </Button>
         </NavbarItem>
       </NavbarContent>

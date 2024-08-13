@@ -23,6 +23,8 @@ import {
   clearState,
   fetchDelete,
 } from "../../features/deleteUser/deleteUserSlice";
+import { useTheme } from "../../context";
+import { list } from "../../languages";
 const { formatDate } = useConvertDate();
 
 const User = () => {
@@ -40,6 +42,8 @@ const User = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [modal, setModal] = useState(0);
+
+  const { language } = useTheme();
 
   const handleOpenDel = () => {
     setModal(0);
@@ -85,7 +89,7 @@ const User = () => {
 
   useEffect(() => {
     getUserInfo(id);
-  }, []);
+  }, [language]);
 
   return (
     <div className="user-container">
@@ -95,7 +99,7 @@ const User = () => {
         startContent={<IoArrowBack />}
         onClick={() => backAndClearState()}
       >
-        go back
+        {list[language].go_back}
       </Button>
       {message ? (
         <p className="text-center">{message}</p>
@@ -107,23 +111,23 @@ const User = () => {
             <>
               <CardBody className="p-3 flex flex-col gap-4">
                 <div className="flex justify-between">
-                  <span>CREATED ACCOUNT:</span>
+                  <span>{list[language].created_account}:</span>
                   <span>{formatDate(user.createdAt)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span> USER NAME:</span>
+                  <span> {list[language].user_name}:</span>
                   <span className={!user.name ? "no-info" : ""}>
                     {user.name || `no information`}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span> MAIL:</span>
+                  <span> {list[language].mail_upper}:</span>
                   <span>{user.email}</span>
                 </div>
 
                 {!user.admin ? (
                   <div className="flex justify-between">
-                    <span>EMAIL TOKEN:</span>
+                    <span> {list[language].email_token.toUpperCase()}:</span>
                     <span className={!user.token ? "no-info" : ""}>
                       {user.token || `no information`}
                     </span>
@@ -132,7 +136,7 @@ const User = () => {
                   <></>
                 )}
                 <div className="flex justify-between">
-                  <span> MAILS SEND:</span>
+                  <span> {list[language].mails_send.toUpperCase()}:</span>
                   <span className={user.count === 0 ? "no-info" : ""}>
                     {user.count}
                   </span>
@@ -154,21 +158,20 @@ const User = () => {
                         dispatch(logout());
                       }}
                     >
-                      Delete My Account <MdDelete />
+                      <MdDelete />
                     </Button>
                   ) : (
-                    `This is a peer administrator account, you cannot
-            change information about this admin-user!`
+                    list[language].descriptions
                   )}
                 </div>
               ) : (
                 <CardFooter className="flex justify-between">
                   <Button color="warning" onPress={() => handleOpenEdit()}>
-                    Edit
+                    {list[language].edit}
                     <MdOutlineEdit />
                   </Button>
                   <Button color="danger" onPress={() => handleOpenDel()}>
-                    Delete <MdDelete />
+                    {list[language].delete} <MdDelete />
                   </Button>
                 </CardFooter>
               )}

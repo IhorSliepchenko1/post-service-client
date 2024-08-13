@@ -19,6 +19,8 @@ import { useConvertDate } from "./../../hooks/useConverDate";
 import ModalMailContent from "../../components/modal-mail";
 import { fetchMails } from "../../features/mails/mailsSlice";
 import { fetchDownloadFile } from "../../features/download-file-page/downloadFileSlice";
+import { useTheme } from "../../context";
+import { list } from "../../languages";
 
 const MailsRender = ({ api }) => {
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ const MailsRender = ({ api }) => {
   const [page, setPage] = useState(1);
 
   const { token, userId } = useSelector((state) => state.auth.userData);
+
+  const { language } = useTheme();
 
   useEffect(() => {
     dispatch(fetchMails({ jwt: token, limit: 10, page, id: userId, api }));
@@ -50,7 +54,7 @@ const MailsRender = ({ api }) => {
       ...mail,
       createdAt: formatDate(mail.createdAt),
     }));
-  }, [data]);
+  }, [data, language]);
 
   const contentValues = (contentData) => {
     setContentMails({
@@ -86,7 +90,9 @@ const MailsRender = ({ api }) => {
   return (
     <div className="flex flex-col justify-center container-table gap-2">
       <div>
-        <div className="p-1">Mails send: {12}</div>
+        <div className="p-1">
+          {list[language].mails_send}: {count}
+        </div>
         <div className="flex gap-2 items-center">
           <Button
             color="primary"
@@ -103,7 +109,7 @@ const MailsRender = ({ api }) => {
               )
             }
           >
-            Download all pages
+            {list[language].download_all}
           </Button>
 
           <Button
@@ -111,7 +117,7 @@ const MailsRender = ({ api }) => {
             endContent={<FaDownload />}
             onClick={() => fileGenerate(data)}
           >
-            Download current page
+            {list[language].download_current}
           </Button>
         </div>
       </div>
@@ -137,11 +143,13 @@ const MailsRender = ({ api }) => {
         }}
       >
         <TableHeader>
-          <TableColumn key="createdAt">DATE</TableColumn>
-          <TableColumn key="btn_content">CONTENT</TableColumn>
-          <TableColumn key="from">SENDER</TableColumn>
-          <TableColumn key="to">RECIPIENT</TableColumn>
-          <TableColumn key="subject">SUBJECT</TableColumn>
+          <TableColumn key="createdAt">{list[language].createdAt}</TableColumn>
+          <TableColumn key="btn_content">
+            {list[language].btn_content}
+          </TableColumn>
+          <TableColumn key="from"> {list[language].from}</TableColumn>
+          <TableColumn key="to">{list[language].to}</TableColumn>
+          <TableColumn key="subject">{list[language].subject}</TableColumn>
         </TableHeader>
         <TableBody
           items={items}
@@ -158,7 +166,7 @@ const MailsRender = ({ api }) => {
                       onPress={onOpen}
                       onClick={() => contentValues(item)}
                     >
-                      check mail
+                      {list[language].check_mail}
                     </Button>
                   ) : (
                     getKeyValue(item, columnKey)
