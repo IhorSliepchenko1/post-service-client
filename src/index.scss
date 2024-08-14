@@ -108,10 +108,7 @@ header {
 }
 
 .theme-icon {
-  position: absolute;
-  right: 0;
-  top: 10px;
-  right: 10px;
+  cursor: pointer;
 }
 
 .language {
@@ -119,4 +116,14 @@ header {
   cursor: pointer;
   padding: 2px;
   border-radius: 5px;
+}
+
+.auth-header {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

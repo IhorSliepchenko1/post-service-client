@@ -9,6 +9,8 @@ import { fetchAuth } from "../../features/auth/authSlice";
 import { fetchCurrent } from "./../../features/current/currentSlice";
 import { useEffect } from "react";
 import { fetchMails } from "../../features/mails/mailsSlice";
+import { list } from "../../languages";
+import { useTheme } from "../../context";
 
 const Registration = ({ setSelected }) => {
   const {
@@ -23,6 +25,8 @@ const Registration = ({ setSelected }) => {
       password: "",
     },
   });
+
+  const { language } = useTheme();
 
   const state = useSelector((state) => state);
   const { userData, status, error } = state.auth;
@@ -58,30 +62,36 @@ const Registration = ({ setSelected }) => {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <InputBasic
         control={control}
-        placeholder="Введите email"
-        label="Email"
+        placeholder={list[language].enter_email}
+        label={
+          list[language].mail_upper[0] +
+          list[language].mail_upper.slice(1).toLowerCase()
+        }
         name="email"
         type="email"
         className="input-width"
       />
-      <InputPassword placeholder={`Введите пароль`} control={control} />
+      <InputPassword
+        placeholder={list[language].enter_password}
+        control={control}
+      />
 
       <ErrorMessage error={error?.error} />
 
-      <p className="text-center text-small">
-        Нет аккаунта?
+      <p className="text-center text-small flex justify-center gap-2">
+        {list[language].no_account}
         <Link
           size="sm"
           className="cursor-pointer"
           onPress={() => setSelected("register")}
         >
-          Зарегистрироваться
+          {list[language].register}
         </Link>
       </p>
 
       <div className="flex gap-2 justify-end">
         <Button fullWidth color="primary" type="submit">
-          Войти
+          {list[language].login}
         </Button>
       </div>
     </form>

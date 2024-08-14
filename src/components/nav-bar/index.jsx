@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context";
 import { logout } from "../../features/auth/authSlice";
 import { list } from "../../languages";
+import SelectLanguage from "../select-language";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -67,11 +68,7 @@ const NavBar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <select className="language" onInput={toggleLanguage} value={language}>
-          <option value="eng">english</option>
-          <option value="ukr">українська</option>
-          <option value="ru">русский</option>
-        </select>
+        <SelectLanguage toggleLanguage={toggleLanguage} language={language} />
 
         <NavbarItem>
           <div className="theme-icon-nav" onClick={toggleTheme}>

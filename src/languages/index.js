@@ -36,6 +36,21 @@ export const list = {
             изменить информацию об этом пользователе-администраторе!`,
 
     go_back: `назад`,
+
+    enter_email: `введите емеил`,
+    enter_password: `введите пароль`,
+    enter_name: `введите имя`,
+    enter_admin_key: `введите админ ключ`,
+    enter_token: `введите емеил токен`,
+    enter: `Вход`,
+    register: `Зарегистрироваться`,
+    login: `Войти`,
+
+    password: `Пароль`,
+    no_account: `Нет аккаунта?`,
+    already_registered: `Уже зарегистрированы?`,
+    admin_key: `Админ ключ`,
+    email_token: `Емеил токен`,
   },
   ukr: {
     my_mails: `Мої листи`,
@@ -74,6 +89,19 @@ export const list = {
             змінювати інформацію про цього адміністратора!`,
 
     go_back: `назад`,
+    enter_email: `введіть email`,
+    enter_password: `введіть пароль`,
+    enter_name: `введіть ім'я`,
+    enter_admin_key: `введіть адмін ключ`,
+    enter_token: `введіть email токен`,
+    enter: `Вхід`,
+    register: `Зареєструватися`,
+    login: `Увійти`,
+    password: `Пароль`,
+    no_account: `Немає акаунта?`,
+    already_registered: `Вже зареєстровані?`,
+    admin_key: `Адмін ключ`,
+    email_token: `Email токен`,
   },
   eng: {
     my_mails: `My mails`,
@@ -112,5 +140,20 @@ export const list = {
             change information about this admin-user!`,
 
     go_back: `go back`,
+
+    enter_email: `enter email`,
+    enter_password: `enter password`,
+    enter_name: `enter your name`,
+    enter_admin_key: `enter admin key`,
+    enter_token: `enter your email token`,
+    enter: `Enter`,
+    register: `Registration`,
+    login: `Login`,
+
+    password: `Password`,
+    no_account: `No account?`,
+    already_registered: `Already registered?`,
+    admin_key: `Admin key`,
+    email_token: `Email token`,
   },
 };
