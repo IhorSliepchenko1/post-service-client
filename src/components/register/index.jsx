@@ -12,6 +12,7 @@ import { useTheme } from "../../context";
 const Registration = ({ setSelected }) => {
   const {
     control,
+    field,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -26,7 +27,7 @@ const Registration = ({ setSelected }) => {
     },
   });
   const { language } = useTheme();
-  const { error, status } = useSelector((state) => state.auth);
+  const { error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
@@ -57,34 +58,32 @@ const Registration = ({ setSelected }) => {
           control={control}
         />
 
-        <Input
+        <InputBasic
           control={control}
-          type="text"
-          variant="bordered"
+          placeholder={list[language].enter_email}
           label={
             list[language].name_upper[0] +
             list[language].name_upper.slice(1).toLowerCase()
           }
-          placeholder={list[language].enter_name}
           name="name"
+          type="text"
           className="input-width"
         />
-        <Input
+
+        <InputBasic
           control={control}
-          type="text"
-          variant="bordered"
           label={list[language].admin_key}
           placeholder={list[language].enter_admin_key}
           name="adminToken"
+          type="text"
           className="input-width"
         />
-        <Input
+        <InputBasic
           control={control}
-          type="text"
-          variant="bordered"
           label={list[language].email_token}
           placeholder={list[language].enter_token}
           name="token"
+          type="text"
           className="input-width"
         />
 

@@ -11,8 +11,8 @@ import { useTheme } from "../../context";
 import { list } from "../../languages";
 
 const UserInfo = () => {
-  const dispatch = useDispatch();
   const state = useSelector((state) => state);
+  const dispatch = useDispatch();
   const { userData, status } = state.currentSlice;
   const { token, userId } = state.auth.userData;
   const { isOpen, onOpen, onClose } = useDisclosure();

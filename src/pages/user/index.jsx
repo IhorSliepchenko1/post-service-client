@@ -37,7 +37,7 @@ const User = () => {
   const { user, status } = state.user;
   const { userId } = state.auth.userData;
 
-  const { message } = state.deleteUser;
+  // const { message } = state.deleteUser;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -69,10 +69,11 @@ const User = () => {
   const deeteMailsAndUser = async () => {
     dispatch(fetchDelete({ jwt: token, id }));
 
+    backAndClearState();
+
     setTimeout(() => {
-      dispatch(clearState());
-      backAndClearState();
-    }, 1000);
+      dispatch(logout());
+    }, 1200);
   };
 
   const onSubmit = async (data) => {
@@ -101,84 +102,80 @@ const User = () => {
       >
         {list[language].go_back}
       </Button>
-      {message ? (
-        <p className="text-center">{message}</p>
-      ) : (
-        <Card className="card-user">
-          {status === `loading` ? (
-            <Spinner color="warning" />
-          ) : (
-            <>
-              <CardBody className="p-3 flex flex-col gap-4">
-                <div className="flex justify-between">
-                  <span>{list[language].created_account}:</span>
-                  <span>{formatDate(user.createdAt)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span> {list[language].user_name}:</span>
-                  <span className={!user.name ? "no-info" : ""}>
-                    {user.name || `no information`}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span> {list[language].mail_upper}:</span>
-                  <span>{user.email}</span>
-                </div>
 
-                {!user.admin ? (
-                  <div className="flex justify-between">
-                    <span> {list[language].email_token.toUpperCase()}:</span>
-                    <span className={!user.token ? "no-info" : ""}>
-                      {user.token || `no information`}
-                    </span>
-                  </div>
-                ) : (
-                  <></>
-                )}
-                <div className="flex justify-between">
-                  <span> {list[language].mails_send.toUpperCase()}:</span>
-                  <span className={user.count === 0 ? "no-info" : ""}>
-                    {user.count}
-                  </span>
-                </div>
-              </CardBody>
-              <Divider />
+      <Card className="card-user">
+        {status === `loading` ? (
+          <Spinner color="warning" />
+        ) : (
+          <>
+            <CardBody className="p-3 flex flex-col gap-4">
+              <div className="flex justify-between">
+                <span>{list[language].created_account}:</span>
+                <span>{formatDate(user.createdAt)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span> {list[language].user_name}:</span>
+                <span className={!user.name ? "no-info" : ""}>
+                  {user.name || `no information`}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span> {list[language].mail_upper}:</span>
+                <span>{user.email}</span>
+              </div>
 
-              {user.admin ? (
-                <div
-                  className={`p-3 text-center ${
-                    userId === id ? `your` : `warning`
-                  }`}
-                >
-                  {userId === id ? (
-                    <Button
-                      color="danger"
-                      onPress={() => {
-                        handleOpenDel();
-                        dispatch(logout());
-                      }}
-                    >
-                      <MdDelete />
-                    </Button>
-                  ) : (
-                    list[language].descriptions
-                  )}
+              {!user.admin ? (
+                <div className="flex justify-between">
+                  <span> {list[language].email_token.toUpperCase()}:</span>
+                  <span className={!user.token ? "no-info" : ""}>
+                    {user.token || `no information`}
+                  </span>
                 </div>
               ) : (
-                <CardFooter className="flex justify-between">
-                  <Button color="warning" onPress={() => handleOpenEdit()}>
-                    {list[language].edit}
-                    <MdOutlineEdit />
-                  </Button>
-                  <Button color="danger" onPress={() => handleOpenDel()}>
-                    {list[language].delete} <MdDelete />
-                  </Button>
-                </CardFooter>
+                <></>
               )}
-            </>
-          )}
-        </Card>
-      )}
+              <div className="flex justify-between">
+                <span> {list[language].mails_send.toUpperCase()}:</span>
+                <span className={user.count === 0 ? "no-info" : ""}>
+                  {user.count}
+                </span>
+              </div>
+            </CardBody>
+            <Divider />
+
+            {user.admin ? (
+              <div
+                className={`p-3 text-center ${
+                  userId === id ? `your` : `warning`
+                }`}
+              >
+                {userId === id ? (
+                  <Button
+                    color="danger"
+                    onPress={() => {
+                      handleOpenDel();
+                    }}
+                  >
+                    <MdDelete /> {list[language].delete_account}
+                  </Button>
+                ) : (
+                  list[language].descriptions
+                )}
+              </div>
+            ) : (
+              <CardFooter className="flex justify-between">
+                <Button color="warning" onPress={() => handleOpenEdit()}>
+                  {list[language].edit}
+                  <MdOutlineEdit />
+                </Button>
+                <Button color="danger" onPress={() => handleOpenDel()}>
+                  {list[language].delete} <MdDelete />
+                </Button>
+              </CardFooter>
+            )}
+          </>
+        )}
+      </Card>
 
       {modal === 1 ? (
         <ModalDeleteProfile

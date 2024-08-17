@@ -9,7 +9,6 @@ const InputBasic = ({
   type,
   control,
   endContent,
-  defaultValue,
   className,
 }) => {
   let rules;
@@ -55,12 +54,10 @@ const InputBasic = ({
   return (
     <Input
       className={className}
-      id={name}
       label={label}
       type={type}
       variant="bordered"
       placeholder={placeholder}
-      defaultValue={defaultValue}
       value={field.value}
       name={field.name}
       isInvalid={invalid}

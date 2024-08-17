@@ -25,18 +25,14 @@ export const list = {
     theme: `Тема письма`,
     recipient: `Получатель`,
     send: `Отправить`,
-
     created_account: `ДАТА СОЗДАНИЯ`,
     user_name: `ИМЯ ПОЛЬЗОВАТЕЛЯ`,
     delete_account: `Удалить мой аккаунт`,
     delete: `Удалить`,
     edit: `Редактировать`,
-
     descriptions: `Это одноранговая учетная запись администратора, вы не можете
             изменить информацию об этом пользователе-администраторе!`,
-
     go_back: `назад`,
-
     enter_email: `введите емеил`,
     enter_password: `введите пароль`,
     enter_name: `введите имя`,
@@ -45,13 +41,13 @@ export const list = {
     enter: `Вход`,
     register: `Зарегистрироваться`,
     login: `Войти`,
-
     password: `Пароль`,
     no_account: `Нет аккаунта?`,
     already_registered: `Уже зарегистрированы?`,
     admin_key: `Админ ключ`,
     email_token: `Емеил токен`,
   },
+
   ukr: {
     my_mails: `Мої листи`,
     create_mails: `Створити`,
@@ -78,16 +74,13 @@ export const list = {
     theme: `Тема листа`,
     recipient: `Отримувач`,
     send: `Відправити`,
-
     created_account: `ДАТА СТВОРЕННЯ`,
     user_name: `ІМ'Я КОРИСТУВАЧА`,
     delete_account: `Видалити мій акаунт`,
     delete: `Видалити`,
     edit: `Редагувати`,
-
     descriptions: `Це обліковий запис однорангового адміністратора, ви не можете
             змінювати інформацію про цього адміністратора!`,
-
     go_back: `назад`,
     enter_email: `введіть email`,
     enter_password: `введіть пароль`,
@@ -129,18 +122,15 @@ export const list = {
     theme: `Subject`,
     recipient: `Recipient`,
     send: `Send`,
-
     created_account: `CREATED ACCOUNT`,
     user_name: `USER NAME`,
-    delete_account: `Delete My Account`,
+    delete_account: `Delete my account`,
     delete: `Delete`,
     edit: `Edit`,
-
     descriptions: `This is a peer administrator account, you cannot
             change information about this admin-user!`,
 
     go_back: `go back`,
-
     enter_email: `enter email`,
     enter_password: `enter password`,
     enter_name: `enter your name`,
@@ -149,7 +139,6 @@ export const list = {
     enter: `Enter`,
     register: `Registration`,
     login: `Login`,
-
     password: `Password`,
     no_account: `No account?`,
     already_registered: `Already registered?`,
